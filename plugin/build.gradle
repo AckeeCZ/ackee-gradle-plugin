@@ -18,9 +18,20 @@ repositories {
     mavenCentral()
 }
 
-//pluginBundle {
-//    // please change these URLs to point to your own website/repository
-//    website = "http://www.gradle.org/"
-//    vcsUrl = "https://github.com/gradle-guides/greeting-plugin-example"
-//    tags = listOf("example", "template")
-//}
+pluginBundle {
+    website = "https://www.ackee.cz/"
+    vcsUrl = "https://github.com/AckeeCZ/ackee-gradle-plugin"
+    tags = ["ackee", "android", "skeleton"]
+}
+
+gradlePlugin {
+    plugins {
+        ackeePlugin {
+            version = 1.0
+            id = 'cz.ackee.gradle.plugin'
+            displayName = 'Ackee Gradle Plugin'
+            description = 'Adds several extensions and tasks used in all our projects'
+            implementationClass = 'cz.ackee.gradle.AckeePlugin'
+        }
+    }
+}

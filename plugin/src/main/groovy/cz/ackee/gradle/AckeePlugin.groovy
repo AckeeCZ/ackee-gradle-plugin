@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Copy
 
-class AckeeBuildPlugin implements Plugin<Project> {
+class AckeePlugin implements Plugin<Project> {
 
     static int getGitCommitsCount(Project project) {
         def stdout = new ByteArrayOutputStream()
