@@ -1,5 +1,6 @@
 package cz.ackee.gradle
 
+import com.android.build.gradle.AppExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -16,7 +17,14 @@ class AckeePlugin implements Plugin<Project> {
         return Integer.parseInt(stdout.toString().trim())
     }
 
+    @Override
     void apply(Project project) {
+
+        AppExtension android = project.extensions.findByType(AppExtension)
+        if (!android) {
+            throw new Exception("Not an Android application. " +
+                    "Did you forget to apply `'com.android.application` plugin?")
+        }
 
         /**
          * Define properties with keystore info
@@ -42,11 +50,12 @@ class AckeePlugin implements Plugin<Project> {
         project.ext.gitCommitsCount = getGitCommitsCount(project)
         project.ext.getGitCommitsCount = { getGitCommitsCount(project) }
 
-        /**
-         * Set output apk destination to file App.apk in outputs folder in project root
-         */
         project.afterEvaluate {
-            project.android.applicationVariants.all { variant ->
+
+            /**
+             * Set output apk destination to file App.apk in outputs folder in project root
+             */
+            android.applicationVariants.all { variant ->
                 def outputs = new File(project.rootDir, "outputs")
                 outputs.mkdir()
                 def apkFile = new File(outputs, "App.apk")
@@ -68,17 +77,17 @@ class AckeePlugin implements Plugin<Project> {
                     variant.assemble.finalizedBy(copyAndRenameAPKTask)
                 }
             }
-        }
 
-        /**
-         * Copy mapping.txt from its location to outputs folder in project root
-         */
-        project.android.applicationVariants.all { variant ->
-            if (variant.getBuildType().isMinifyEnabled()) {
-                variant.assemble.doLast {
-                    project.copy {
-                        from variant.mappingFile
-                        into "${project.rootDir}/outputs"
+            /**
+             * Copy mapping.txt from its location to outputs folder in project root
+             */
+            android.applicationVariants.all { variant ->
+                if (variant.getBuildType().isMinifyEnabled()) {
+                    variant.assemble.doLast {
+                        project.copy {
+                            from variant.mappingFile
+                            into "${project.rootDir}/outputs"
+                        }
                     }
                 }
             }
@@ -88,7 +97,7 @@ class AckeePlugin implements Plugin<Project> {
          * Defines standard signing configs for debugging and release.
          * Keystores must be located in keystore directory in project's root directory.
          */
-        project.android.signingConfigs {
+        android.signingConfigs {
             def keystoreDir = new File(project.rootDir, "keystore")
 
             release {
@@ -112,7 +121,7 @@ class AckeePlugin implements Plugin<Project> {
          * **Beta** is used for internal testing
          * **Release** is used in production
          */
-        project.android.buildTypes {
+        android.buildTypes {
             debug {
                 applicationIdSuffix '.debug'
                 manifestPlaceholders = [
