@@ -23,7 +23,7 @@ class AckeePlugin implements Plugin<Project> {
         AppExtension android = project.extensions.findByType(AppExtension)
         if (!android) {
             throw new Exception("Not an Android application. " +
-                    "Did you forget to apply `'com.android.application` plugin?")
+                    "Did you forget to apply 'com.android.application' plugin?")
         }
 
         /**

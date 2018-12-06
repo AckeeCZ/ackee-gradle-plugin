@@ -28,11 +28,11 @@ pluginBundle {
 gradlePlugin {
     plugins {
         ackeePlugin {
-            version = 1.3
+            version = 1.6
             id = 'cz.ackee.gradle.plugin'
             displayName = 'Ackee Gradle Plugin'
             description = 'Adds several extensions and tasks used in all our projects'
-            implementationClass = 'cz.ackee.gradle.AckeePlugin'
+            implementationClass = 'cz.ackee.gradle.AckeePluginKotlin'
         }
     }
 }

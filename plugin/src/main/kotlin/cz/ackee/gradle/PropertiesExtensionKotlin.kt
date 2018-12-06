@@ -10,8 +10,8 @@ import org.gradle.api.Project
  */
 open class PropertiesExtensionKotlin(project: Project, fileName: String) {
 
-    val fileName: String = fileName
-    val path: String = "${project.rootDir}\\"
+    var fileName: String = fileName
+    var path: String = "${project.rootDir}\\"
     
     val fullPath: String
         get() = path + fileName

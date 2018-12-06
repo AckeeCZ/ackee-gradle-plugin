@@ -25,9 +25,6 @@ class AckeePluginKotlin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-        val android = project.extensions.findByType(AppExtension::class.java) ?: throw Exception(
-                "Not an Android application. Did you forget to apply `'com.android.application` plugin?"
-        )
 
         /**
          * Define properties with keystore info
@@ -45,109 +42,116 @@ class AckeePluginKotlin : Plugin<Project> {
         keystoreProperties.load(BufferedReader(FileReader(project.file(appPropertiesExt.fullPath))))
         project.extensions.extraProperties.set("appProperties", appProperties)
 
-//        project.beforeEvaluate {
-//            /**
-//             * Get count of git commits
-//             */
-//            project.extensions.extraProperties.set("gitCommitsCount", getGitCommitsCount(project))
-//            project.extensions.extraProperties.set("getGitCommitsCount", { getGitCommitsCount(project) })
-//        }
-        project.afterEvaluate {
-
+        project.beforeEvaluate {
             /**
-             * Set output apk destination to file App.apk in outputs folder in project root
+             * Get count of git commits
              */
-            android.applicationVariants.all { variant ->
-                val outputs = File(project.rootDir, "outputs")
-                outputs.mkdir()
-                val apkFile = File(outputs, "App.apk")
+            project.extensions.extraProperties.set("gitCommitsCount", getGitCommitsCount(project))
+            project.extensions.extraProperties.set("getGitCommitsCount", { getGitCommitsCount(project) })
+        }
 
-                variant.outputs.forEach { output: BaseVariantOutput ->
-                    val taskName = "copyAndRename${variant.name.capitalize()}APK"
-                    val copyAndRenameAPKTask = project.tasks.create(taskName, Copy::class.java) { task ->
-                        task.from(output.outputFile.parent)
-                        task.into(task.outputs)
-                        task.include(output.outputFile.name)
-                        task.rename(output.outputFile.name, apkFile.name)
+        project.pluginManager.withPlugin("com.android.application") {
+            val android = project.extensions.findByType(AppExtension::class.java) ?: throw Exception(
+                    "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
+            )
+
+            project.afterEvaluate {
+
+                /**
+                 * Set output apk destination to file App.apk in outputs folder in project root
+                 */
+                android.applicationVariants.all { variant ->
+                    val outputs = File(project.rootDir, "outputs")
+                    outputs.mkdir()
+                    val apkFile = File(outputs, "App.apk")
+
+                    variant.outputs.forEach { output: BaseVariantOutput ->
+                        val taskName = "copyAndRename${variant.name.capitalize()}APK"
+                        val copyAndRenameAPKTask = project.tasks.create(taskName, Copy::class.java) { task ->
+                            task.from(output.outputFile.parent)
+                            task.into(task.outputs)
+                            task.include(output.outputFile.name)
+                            task.rename(output.outputFile.name, apkFile.name)
+                        }
+
+                        // if copyAndRenameAPKTask needs to automatically execute assemble before
+                        copyAndRenameAPKTask.dependsOn(variant.assemble)
+                        copyAndRenameAPKTask.mustRunAfter(variant.assemble)
+
+                        // if assemble needs to automatically execute copyAndRenameAPKTask after
+                        variant.assemble.finalizedBy(copyAndRenameAPKTask)
                     }
-
-                    // if copyAndRenameAPKTask needs to automatically execute assemble before
-                    copyAndRenameAPKTask.dependsOn(variant.assemble)
-                    copyAndRenameAPKTask.mustRunAfter(variant.assemble)
-
-                    // if assemble needs to automatically execute copyAndRenameAPKTask after
-                    variant.assemble.finalizedBy(copyAndRenameAPKTask)
                 }
-            }
 
-            /**
-             * Copy mapping.txt from its location to outputs folder in project root
-             */
-            android.applicationVariants.all { variant ->
-                if (variant.buildType.isMinifyEnabled) {
-                    variant.assemble.doLast {
-                        project.copy { spec ->
-                            spec.from(variant.mappingFile)
-                            spec.into("${project.rootDir}/outputs")
+                /**
+                 * Copy mapping.txt from its location to outputs folder in project root
+                 */
+                android.applicationVariants.all { variant ->
+                    if (variant.buildType.isMinifyEnabled) {
+                        variant.assemble.doLast {
+                            project.copy { spec ->
+                                spec.from(variant.mappingFile)
+                                spec.into("${project.rootDir}/outputs")
+                            }
                         }
                     }
                 }
             }
-        }
 
-        /**
-         * Defines standard signing configs for debugging and release.
-         * Keystores must be located in keystore directory in project's root directory.
-         */
-        android.signingConfigs { container ->
-            val keystoreDir = File(project.rootDir, "keystore")
+            /**
+             * Defines standard signing configs for debugging and release.
+             * Keystores must be located in keystore directory in project's root directory.
+             */
+            android.signingConfigs { container ->
+                val keystoreDir = File(project.rootDir, "keystore")
 
-            container.getByName("release") {
-                it.keyAlias = keystoreProperties["key_alias"] as String
-                it.storeFile = File(keystoreDir, keystoreProperties["key_file"] as String)
-                it.storePassword = keystoreProperties["key_password"] as String
-                it.keyPassword = keystoreProperties["key_password"] as String
+                container.maybeCreate("release").apply {
+                    keyAlias = keystoreProperties["key_alias"] as String?
+                    storeFile = File(keystoreDir, keystoreProperties["key_file"] as String?)
+                    storePassword = keystoreProperties["key_password"] as String?
+                    keyPassword = keystoreProperties["key_password"] as String?
+                }
+
+                container.maybeCreate("debug").apply {
+                    keyAlias = "androiddebugkey"
+                    storeFile = File(keystoreDir, "debug.keystore")
+                    storePassword = "android"
+                    keyPassword = "android"
+                }
             }
 
-            container.getByName("debug") {
-                it.keyAlias = "androiddebugkey"
-                it.storeFile = File(keystoreDir, "debug.keystore")
-                it.storePassword = "android"
-                it.keyPassword = "android"
-            }
-        }
+            /**
+             * Defines standard build types: Debug, Beta and Release.
+             * **Debug** type should be used only during development
+             * **Beta** is used for internal testing
+             * **Release** is used in production
+             */
+            android.buildTypes { container ->
+                container.maybeCreate("debug").apply {
+                    applicationIdSuffix = ".debug"
+                    manifestPlaceholders = mapOf(
+                            "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
+                            "appNameSuffix" to " D"
+                    )
+                }
 
-        /**
-         * Defines standard build types: Debug, Beta and Release.
-         * **Debug** type should be used only during development
-         * **Beta** is used for internal testing
-         * **Release** is used in production
-         */
-        android.buildTypes { container ->
-            container.getByName("debug") {
-                it.applicationIdSuffix = ".debug"
-                it.manifestPlaceholders = mapOf(
-                        "appId" to appProperties["package_name"] as String + it.applicationIdSuffix,
-                        "appNameSuffix" to " D"
-                )
-            }
+                container.maybeCreate("beta").apply {
+                    applicationIdSuffix = ".beta"
+                    manifestPlaceholders = mapOf(
+                            "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
+                            "appNameSuffix" to " B " + android.defaultConfig.versionCode
+                    )
 
-            container.getByName("beta") {
-                it.applicationIdSuffix = ".beta"
-                it.manifestPlaceholders = mapOf(
-                        "appId" to appProperties["package_name"] as String + it.applicationIdSuffix,
-                        "appNameSuffix" to " B " + android.defaultConfig.versionCode
-                )
+                    signingConfig = android.signingConfigs.getByName("debug")
+                    isMinifyEnabled = true
+                    proguardFiles(android.getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+                }
 
-                it.signingConfig = android.signingConfigs.getByName("debug")
-                it.isMinifyEnabled = true
-                it.proguardFiles(android.getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            }
-
-            container.getByName("release") {
-                it.signingConfig = android.signingConfigs.getByName("release")
-                it.isMinifyEnabled = true
-                it.proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                container.maybeCreate("release").apply {
+                    signingConfig = android.signingConfigs.getByName("release")
+                    isMinifyEnabled = true
+                    proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                }
             }
         }
     }
