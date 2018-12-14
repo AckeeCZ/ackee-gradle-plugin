@@ -7,10 +7,11 @@ plugins {
 }
 
 dependencies {
-    implementation gradleApi()
-    implementation localGroovy()
-    implementation "com.android.tools.build:gradle:2.3.3"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation(gradleApi())
+    implementation(localGroovy())
+    implementation("com.android.tools.build:gradle:3.2.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
 }
 
 repositories {
@@ -36,3 +37,7 @@ gradlePlugin {
         }
     }
 }
+
+apply from: rootProject.file('gradle/bintray/config.gradle')
+apply from: rootProject.file('gradle/bintray/install.gradle')
+apply from: rootProject.file('gradle/bintray/bintray.gradle')
