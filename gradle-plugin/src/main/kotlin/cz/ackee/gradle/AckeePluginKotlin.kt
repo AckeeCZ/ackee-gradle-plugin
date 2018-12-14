@@ -57,19 +57,21 @@ class AckeePluginKotlin : Plugin<Project> {
 
             project.afterEvaluate {
 
+                val outputs = File(project.rootDir, "outputs")
+                outputs.mkdir()
+
                 /**
                  * Set output apk destination to file App.apk in outputs folder in project root
                  */
                 android.applicationVariants.all { variant ->
-                    val outputs = File(project.rootDir, "outputs")
-                    outputs.mkdir()
+
                     val apkFile = File(outputs, "App.apk")
 
                     variant.outputs.forEach { output: BaseVariantOutput ->
                         val taskName = "copyAndRename${variant.name.capitalize()}APK"
                         val copyAndRenameAPKTask = project.tasks.create(taskName, Copy::class.java) { task ->
                             task.from(output.outputFile.parent)
-                            task.into(task.outputs)
+                            task.into(outputs)
                             task.include(output.outputFile.name)
                             task.rename(output.outputFile.name, apkFile.name)
                         }
@@ -91,7 +93,7 @@ class AckeePluginKotlin : Plugin<Project> {
                         variant.assemble.doLast {
                             project.copy { spec ->
                                 spec.from(variant.mappingFile)
-                                spec.into("${project.rootDir}/outputs")
+                                spec.into(outputs)
                             }
                         }
                     }
