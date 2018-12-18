@@ -11,6 +11,10 @@ import java.io.File
 import java.io.FileReader
 import java.util.Properties
 
+//import org.gradle.kotlin.dsl.*
+//import org.gradle.kotlin.dsl.extra
+//import org.gradle.kotlin.dsl.kotlin
+
 class AckeePluginKotlin : Plugin<Project> {
 
     companion object {
@@ -48,6 +52,12 @@ class AckeePluginKotlin : Plugin<Project> {
              */
             project.extensions.extraProperties.set("gitCommitsCount", getGitCommitsCount(project))
             project.extensions.extraProperties.set("getGitCommitsCount", { getGitCommitsCount(project) })
+
+//            val kotlin_version by project.extra("1.3.11")
+//
+//            val gitCommitsCount: Int by project.extensions.extraProperties(
+//
+//            )
         }
 
         project.pluginManager.withPlugin("com.android.application") {
