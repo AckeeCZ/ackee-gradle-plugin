@@ -1,3 +1,4 @@
+[ ![Download](https://api.bintray.com/packages/ackeecz/gradle-plugin/build-gradle-plugin/images/download.svg) ](https://bintray.com/ackeecz/gradle-plugin/build-gradle-plugin/_latestVersion)
 # Ackee gradle plugin
 
 The plugin configures gradle project in several ways:
