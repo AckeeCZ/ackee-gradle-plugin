@@ -82,12 +82,11 @@ appProperties {
 
 ## Usage
 
-It can be used in any (Android) project by adding classpath dependency `cz.ackee.gradle.plugin` into
-project's buildscript:
+It can be used in any (Android) project by adding classpath dependency into project's buildscript:
 ```
 buildscript {
     dependencies {
-        classpath("cz.ackee.gradle.plugin:1.0")
+        classpath("cz.ackee:build-gradle-plugin:1.0.0-RC12")
     }
 }
 ```
@@ -117,7 +116,7 @@ the plugin will still work.
 
 ## Editing
 The project can be opened and edited directly in Android Studio.
-Unfortunately, you will have to use Sync Project with Gradle Files button a lot.
+You will have to use Sync Project with Gradle Files button a lot though.
 The project does not sync automatically after opening the project and sometimes when
 making changes to the plugin.
 
