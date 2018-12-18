@@ -20,8 +20,8 @@ repositories {
 }
 
 ext {
-    bintrayName = 'ackee-gradle-plugin'
-    publishedArtifactId = 'gradle-plugin'
+    bintrayName = 'build-gradle-plugin'
+    publishedArtifactId = 'build-gradle-plugin'
 
     libraryName = 'Ackee Gradle Plugin'
     libraryDescription = 'Adds several extensions and tasks used in all our projects'
