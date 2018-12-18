@@ -1,7 +1,6 @@
 package cz.ackee.gradle
 
 import com.android.build.gradle.AppExtension
-import com.android.build.gradle.api.BaseVariantOutput
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
@@ -11,18 +10,21 @@ import java.io.File
 import java.io.FileReader
 import java.util.Properties
 
-//import org.gradle.kotlin.dsl.*
-//import org.gradle.kotlin.dsl.extra
-//import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.extra
 
 class AckeePluginKotlin : Plugin<Project> {
 
     companion object {
+
+        /**
+         * Returns number of commits in the current branch of the project.
+         */
         fun getGitCommitsCount(project: Project): Int {
             val stdout = ByteArrayOutputStream()
-            project.exec { spec ->
-                spec.commandLine = listOf("git", "rev-list", "HEAD", "--count")
-                spec.standardOutput = stdout
+            project.exec {
+                commandLine = listOf("git", "rev-list", "HEAD", "--count")
+                standardOutput = stdout
             }
             return Integer.parseInt(stdout.toString().trim())
         }
@@ -34,32 +36,27 @@ class AckeePluginKotlin : Plugin<Project> {
          * Define properties with keystore info
          */
         val keystorePropertiesExt = project.extensions.create("keystoreProperties", PropertiesExtensionKotlin::class.java, project, "keystore.properties")
-        val keystoreProperties = Properties()
-        keystoreProperties.load(BufferedReader(FileReader(project.file(keystorePropertiesExt.fullPath))))
-        project.extensions.extraProperties.set("keystoreProperties", keystoreProperties)
+        val keystoreProperties by project.extra(Properties().apply {
+            load(BufferedReader(FileReader(project.file(keystorePropertiesExt.fullPath))))
+        })
 
         /**
          * Define properties with application info
          */
         val appPropertiesExt = project.extensions.create("appProperties", PropertiesExtensionKotlin::class.java, project, "app.properties")
-        val appProperties = Properties()
-        keystoreProperties.load(BufferedReader(FileReader(project.file(appPropertiesExt.fullPath))))
-        project.extensions.extraProperties.set("appProperties", appProperties)
+        val appProperties by project.extra(Properties().apply {
+            load(BufferedReader(FileReader(project.file(appPropertiesExt.fullPath))))
+        })
 
-        project.beforeEvaluate {
-            /**
-             * Get count of git commits
-             */
-            project.extensions.extraProperties.set("gitCommitsCount", getGitCommitsCount(project))
-            project.extensions.extraProperties.set("getGitCommitsCount", { getGitCommitsCount(project) })
+        /**
+         * Number of git commits.
+         * Also available outside of the plugin scope using [extra].
+         */
+        val gitCommitsCount: Int by project.extra(getGitCommitsCount(project))
 
-//            val kotlin_version by project.extra("1.3.11")
-//
-//            val gitCommitsCount: Int by project.extensions.extraProperties(
-//
-//            )
-        }
-
+        /**
+         * Configure the android plugin once it is applied.
+         */
         project.pluginManager.withPlugin("com.android.application") {
             val android = project.extensions.findByType(AppExtension::class.java) ?: throw Exception(
                     "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
@@ -73,17 +70,17 @@ class AckeePluginKotlin : Plugin<Project> {
                 /**
                  * Set output apk destination to file App.apk in outputs folder in project root
                  */
-                android.applicationVariants.all { variant ->
+                android.applicationVariants.forEach { variant ->
 
                     val apkFile = File(outputs, "App.apk")
 
-                    variant.outputs.forEach { output: BaseVariantOutput ->
+                    variant.outputs.forEach { output ->
                         val taskName = "copyAndRename${variant.name.capitalize()}APK"
-                        val copyAndRenameAPKTask = project.tasks.create(taskName, Copy::class.java) { task ->
-                            task.from(output.outputFile.parent)
-                            task.into(outputs)
-                            task.include(output.outputFile.name)
-                            task.rename(output.outputFile.name, apkFile.name)
+                        val copyAndRenameAPKTask = tasks.create(taskName, Copy::class.java) {
+                            from(output.outputFile.parent)
+                            into(outputs)
+                            include(output.outputFile.name)
+                            rename(output.outputFile.name, apkFile.name)
                         }
 
                         // if copyAndRenameAPKTask needs to automatically execute assemble before
@@ -98,12 +95,12 @@ class AckeePluginKotlin : Plugin<Project> {
                 /**
                  * Copy mapping.txt from its location to outputs folder in project root
                  */
-                android.applicationVariants.all { variant ->
-                    if (variant.buildType.isMinifyEnabled) {
-                        variant.assemble.doLast {
-                            project.copy { spec ->
-                                spec.from(variant.mappingFile)
-                                spec.into(outputs)
+                android.applicationVariants.all {
+                    if (buildType.isMinifyEnabled) {
+                        assemble.doLast {
+                            project.copy {
+                                from(mappingFile)
+                                into(outputs)
                             }
                         }
                     }
@@ -114,17 +111,17 @@ class AckeePluginKotlin : Plugin<Project> {
              * Defines standard signing configs for debugging and release.
              * Keystores must be located in keystore directory in project's root directory.
              */
-            android.signingConfigs { container ->
+            android.signingConfigs {
                 val keystoreDir = File(project.rootDir, "keystore")
 
-                container.maybeCreate("release").apply {
+                maybeCreate("release").apply {
                     keyAlias = keystoreProperties["key_alias"] as String?
                     storeFile = File(keystoreDir, keystoreProperties["key_file"] as String?)
                     storePassword = keystoreProperties["key_password"] as String?
                     keyPassword = keystoreProperties["key_password"] as String?
                 }
 
-                container.maybeCreate("debug").apply {
+                maybeCreate("debug").apply {
                     keyAlias = "androiddebugkey"
                     storeFile = File(keystoreDir, "debug.keystore")
                     storePassword = "android"
@@ -133,13 +130,19 @@ class AckeePluginKotlin : Plugin<Project> {
             }
 
             /**
+             * Set default version code to git commits count.
+             * User still can set their own value though.
+             */
+            android.defaultConfig.versionCode = gitCommitsCount
+
+            /**
              * Defines standard build types: Debug, Beta and Release.
              * **Debug** type should be used only during development
              * **Beta** is used for internal testing
              * **Release** is used in production
              */
-            android.buildTypes { container ->
-                container.maybeCreate("debug").apply {
+            android.buildTypes {
+                maybeCreate("debug").apply {
                     applicationIdSuffix = ".debug"
                     manifestPlaceholders = mapOf(
                             "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
@@ -147,7 +150,7 @@ class AckeePluginKotlin : Plugin<Project> {
                     )
                 }
 
-                container.maybeCreate("beta").apply {
+                maybeCreate("beta").apply {
                     applicationIdSuffix = ".beta"
                     manifestPlaceholders = mapOf(
                             "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
@@ -159,7 +162,7 @@ class AckeePluginKotlin : Plugin<Project> {
                     proguardFiles(android.getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
                 }
 
-                container.maybeCreate("release").apply {
+                maybeCreate("release").apply {
                     signingConfig = android.signingConfigs.getByName("release")
                     isMinifyEnabled = true
                     proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

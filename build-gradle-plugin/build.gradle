@@ -1,4 +1,5 @@
 plugins {
+    id("org.gradle.kotlin.kotlin-dsl") version "1.0.4"
     id("java")
     id("groovy")
     id("kotlin")
