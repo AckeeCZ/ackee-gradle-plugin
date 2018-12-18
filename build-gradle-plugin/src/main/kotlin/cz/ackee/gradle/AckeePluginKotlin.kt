@@ -145,7 +145,6 @@ class AckeePluginKotlin : Plugin<Project> {
                 maybeCreate("debug").apply {
                     applicationIdSuffix = ".debug"
                     manifestPlaceholders = mapOf(
-                            "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
                             "appNameSuffix" to " D"
                     )
                 }
@@ -153,7 +152,6 @@ class AckeePluginKotlin : Plugin<Project> {
                 maybeCreate("beta").apply {
                     applicationIdSuffix = ".beta"
                     manifestPlaceholders = mapOf(
-                            "appId" to appProperties["package_name"] as String? + applicationIdSuffix,
                             "appNameSuffix" to " B " + android.defaultConfig.versionCode
                     )
 
