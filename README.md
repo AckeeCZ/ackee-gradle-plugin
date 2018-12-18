@@ -86,7 +86,7 @@ It can be used in any (Android) project by adding classpath dependency into proj
 ```
 buildscript {
     dependencies {
-        classpath("cz.ackee:build-gradle-plugin:1.0.0-RC12")
+        classpath("cz.ackee:build-gradle-plugin:1.0.0")
     }
 }
 ```
@@ -121,17 +121,9 @@ The project does not sync automatically after opening the project and sometimes 
 making changes to the plugin.
 
 ## Publishing
-To be able to publish the plugin, you need to add following two properties to your
-`~/.gradle/gradle.properties` file:
+Plugins can be published to specialized Gradle repository https://plugins.gradle.org/.
+Unfortunately there were some problems syncing the project when the plugin was retrieved
+from Gradle repository. To work around the issue, the plugin is now uploaded to bintray
+and jcenter.
 
-```
-gradle.publish.key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-gradle.publish.secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-You can get the keys in two ways:
-- Log into https://plugins.gradle.org/u/ackee and manually copy the keys from there
-- Let gradle do it for you by running `plugin portal`->`login` task. It will ask you for 
-login credentials and copy the keys automatically. Cool.
-
-Also don't forget to update the version.
+Publishing process to bintray is the same as for any standard library.
