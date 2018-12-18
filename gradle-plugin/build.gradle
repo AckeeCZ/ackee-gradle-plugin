@@ -3,7 +3,6 @@ plugins {
     id("groovy")
     id("kotlin")
     id("java-gradle-plugin")
-    id("com.gradle.plugin-publish") version "0.10.0"
 }
 
 dependencies {
@@ -20,24 +19,13 @@ repositories {
     mavenCentral()
 }
 
-pluginBundle {
-    website = "https://www.ackee.cz/"
-    vcsUrl = "https://github.com/AckeeCZ/ackee-gradle-plugin"
-    tags = ["ackee", "android", "skeleton"]
+ext {
+    bintrayName = 'ackee-gradle-plugin'
+    publishedArtifactId = 'gradle-plugin'
+
+    libraryName = 'Ackee Gradle Plugin'
+    libraryDescription = 'Adds several extensions and tasks used in all our projects'
 }
 
-gradlePlugin {
-    plugins {
-        ackeePlugin {
-            version = 1.7
-            id = 'cz.ackee.gradle.plugin'
-            displayName = 'Ackee Gradle Plugin'
-            description = 'Adds several extensions and tasks used in all our projects'
-            implementationClass = 'cz.ackee.gradle.AckeePluginKotlin'
-        }
-    }
-}
-
-apply from: rootProject.file('gradle/bintray/config.gradle')
 apply from: rootProject.file('gradle/bintray/install.gradle')
 apply from: rootProject.file('gradle/bintray/bintray.gradle')
