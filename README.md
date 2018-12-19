@@ -21,11 +21,21 @@ the same device.
 
 **Beta** and **Release** versions are build with proguard enabled.
 
-Note: You should use custom application label in your `AndroidManifest.xml` for the enhanced
-application names to appear:
+You have to use custom `AndroidManifest.xml` for each build variant.
+For debug and beta variants, use custom application label:
 ```
-<application android:label="${appName}${appNameSuffix}" />
+<application
+    android:label="${appName}${appNameSuffix}"
+    tools:replace="android:label"/>
 ```
+For release version you can retrieve the name directly from strings:
+```
+<application
+    android:label="@string/app_name"
+    tools:replace="android:label"/>
+```
+
+Check `sample` subproject for sample implementation.
 
 ### Copy apk and mapping
 
