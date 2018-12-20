@@ -1,0 +1,32 @@
+plugins {
+    id("org.gradle.kotlin.kotlin-dsl") version "1.0.4"
+    id("java")
+    id("groovy")
+    id("kotlin")
+    id("java-gradle-plugin")
+}
+
+dependencies {
+    implementation(gradleApi())
+    implementation(localGroovy())
+    implementation("com.android.tools.build:gradle:3.2.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+}
+
+ext {
+    bintrayName = 'build-gradle-plugin'
+    publishedArtifactId = 'build-gradle-plugin'
+
+    libraryName = 'Ackee Gradle Plugin'
+    libraryDescription = 'Adds several extensions and tasks used in all our projects'
+}
+
+apply from: rootProject.file('gradle/bintray/install.gradle')
+apply from: rootProject.file('gradle/bintray/bintray.gradle')

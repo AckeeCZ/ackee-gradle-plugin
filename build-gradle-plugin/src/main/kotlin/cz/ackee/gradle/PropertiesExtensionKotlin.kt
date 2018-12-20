@@ -8,15 +8,12 @@ import org.gradle.api.Project
  * Only fileName needs to be specified. The file is, by default, searched for in the the
  * project's root directory.
  */
-class PropertiesExtension {
-    String fileName
-    String path
+open class PropertiesExtensionKotlin(project: Project, fileName: String) {
 
-    PropertiesExtension(Project project) {
-        path = "${project.rootDir}\\"
-    }
+    var fileName: String = fileName
+    var path: String = "${project.rootDir}\\"
+    
+    val fullPath: String
+        get() = path + fileName
 
-    String fullPath() {
-        return path + fileName
-    }
 }
