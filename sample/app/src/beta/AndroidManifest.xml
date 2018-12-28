@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="cz.ackee.sample"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:label="${appName}${appNameSuffix}"
+        tools:replace="android:label"/>
+
+</manifest>
