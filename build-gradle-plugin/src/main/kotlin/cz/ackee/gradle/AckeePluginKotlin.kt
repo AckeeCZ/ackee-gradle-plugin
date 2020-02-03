@@ -213,6 +213,7 @@ class AckeePluginKotlin : Plugin<Project> {
                 maybeCreate("release").apply {
                     signingConfig = android.signingConfigs.getByName("release")
                     isMinifyEnabled = true
+                    isShrinkResources = true
                     proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                 }
             }
