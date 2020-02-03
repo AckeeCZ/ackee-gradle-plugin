@@ -93,6 +93,35 @@ class AckeePluginKotlin : Plugin<Project> {
                 }
 
                 /**
+                 * Create dynamic task for each of `bundleXXX` tasks that will be performed after creation of
+                 * app bundle is done. This task will copy generated aab file to `outputs/App.aab` file where
+                 * CI server expects it.
+                 */
+                android.applicationVariants.forEach { variant ->
+
+                    val aabFile = File(outputs, "App.aab")
+
+                    val taskName = "copyAndRename${variant.name.capitalize()}Aab"
+                    val copyAndRenameAABTask = tasks.create(taskName, Copy::class.java) {
+                        val path = "${buildDir}/outputs/bundle/${variant.name}/"
+                        val aabName = "app-${variant.flavorName}-${variant.buildType.name}.aab"
+
+                        from(path)
+                        into(outputs)
+                        include(aabName)
+                        rename(aabName, aabFile.name)
+                    }
+
+                    val bundleTask = tasks.named("bundle${variant.name.capitalize()}").get()
+                    // if copyAndRenameAABTask needs to automatically execute assemble before
+                    copyAndRenameAABTask.dependsOn(bundleTask)
+                    copyAndRenameAABTask.mustRunAfter(bundleTask)
+
+                    // if assemble needs to automatically execute copyAndRenameAABTask after
+                    bundleTask.finalizedBy(copyAndRenameAABTask)
+                }
+
+                /**
                  * Copy mapping.txt from its location to outputs folder in project root
                  */
                 android.applicationVariants.all {
@@ -104,6 +133,27 @@ class AckeePluginKotlin : Plugin<Project> {
                             }
                         }
                     }
+                }
+            }
+
+            /**
+             * App Distribution expects changelog in file `outputs/changelog.txt` where Jenkins store the changelog. If this file does
+             * not exist upload fails. This task ensures that the file exists
+             */
+            project.tasks.whenTaskAdded {
+                if (name.startsWith("appDistributionUpload")) {
+                    val renameTaskName = "checkChangelogFileTask${name.capitalize()}"
+                    project.tasks.create(renameTaskName) {
+                        doLast {
+                            println("In changelog creation")
+                            val file = File("${project.rootDir}/outputs/changelog.txt")
+                            if (!file.exists()) {
+                                file.createNewFile()
+                            }
+                        }
+                    }
+
+                    dependsOn(renameTaskName)
                 }
             }
 
