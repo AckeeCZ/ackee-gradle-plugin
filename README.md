@@ -39,7 +39,7 @@ Check `sample` subproject for sample implementation.
 
 ### Copy apk and mapping
 
-The plugin configures the project to automatically copy assembled apk and mapping files into
+The plugin configures the project to automatically copy assembled apk, app bundle and mapping files into
 `outputs` directory in the project's root after each successful build.
 
 ### Signing configs
