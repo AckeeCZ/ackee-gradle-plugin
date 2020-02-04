@@ -131,6 +131,17 @@ You will have to use Sync Project with Gradle Files button a lot though.
 The project does not sync automatically after opening the project and sometimes when
 making changes to the plugin.
 
+## Testing
+After you make some changes it is a good idea to test that. You can run a `publishToMavenLocal`
+gradle task which will publish your updated plugin to the local maven repository on your machine.
+Then you can easily test that in some of your Android projects. All you need to do is include your
+updated plugin the standard way and add `mavenLocal()` repository to your `buildscript`
+`repositories` in the `build.gradle` of your root project folder.
+
+It is also recommended to increase a version of your plugin before publishing to the local maven
+repository. This way you can be totally sure that you use your updated plugin and not the old version
+fetched from the central maven repository.
+
 ## Publishing
 Plugins can be published to specialized Gradle repository https://plugins.gradle.org/.
 Unfortunately there were some problems syncing the project when the plugin was retrieved
