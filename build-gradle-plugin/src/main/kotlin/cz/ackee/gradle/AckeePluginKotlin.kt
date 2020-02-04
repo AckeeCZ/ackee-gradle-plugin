@@ -104,7 +104,8 @@ class AckeePluginKotlin : Plugin<Project> {
                     val taskName = "copyAndRename${variant.name.capitalize()}Aab"
                     val copyAndRenameAABTask = tasks.create(taskName, Copy::class.java) {
                         val path = "${buildDir}/outputs/bundle/${variant.name}/"
-                        val aabName = "app-${variant.flavorName}-${variant.buildType.name}.aab"
+                        val flavorName = if (variant.flavorName.isNullOrEmpty()) "" else "-${variant.flavorName}"
+                        val aabName = "app$flavorName-${variant.buildType.name}.aab"
 
                         from(path)
                         into(outputs)
