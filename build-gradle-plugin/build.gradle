@@ -4,6 +4,7 @@ plugins {
     id("groovy")
     id("kotlin")
     id("java-gradle-plugin")
+    id("maven-publish")
 }
 
 dependencies {
@@ -30,3 +31,17 @@ ext {
 
 apply from: rootProject.file('gradle/bintray/install.gradle')
 apply from: rootProject.file('gradle/bintray/bintray.gradle')
+
+// This allows you to publish to local maven repository on your machine via publishToMavenLocal task
+// for testing purposes. You can then reference this plugin the standard way in your project but it
+// will be fetched from this local maven repository.
+publishing {
+    publications {
+        pluginPublication (MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId "build-gradle-plugin"
+            version project.version
+        }
+    }
+}
