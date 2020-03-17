@@ -90,6 +90,10 @@ appProperties {
 }
 ```
 
+### Git hooks copying
+If folder `.githooks` exists within the repository content of this folder is copied to the `.git/hooks` folder. Thats because we want to have some
+hooks as part of the git repository and there is no standard way to do so.  
+
 
 ## Usage
 
