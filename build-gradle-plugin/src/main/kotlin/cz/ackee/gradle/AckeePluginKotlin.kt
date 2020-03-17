@@ -4,14 +4,15 @@ import com.android.build.gradle.AppExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.extra
+import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.invoke
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
 import java.util.Properties
-
-import org.gradle.kotlin.dsl.*
-import org.gradle.kotlin.dsl.extra
 
 class AckeePluginKotlin : Plugin<Project> {
 
@@ -35,7 +36,12 @@ class AckeePluginKotlin : Plugin<Project> {
         /**
          * Define properties with keystore info
          */
-        val keystorePropertiesExt = project.extensions.create("keystoreProperties", PropertiesExtensionKotlin::class.java, project, "keystore.properties")
+        val keystorePropertiesExt = project.extensions.create(
+            "keystoreProperties",
+            PropertiesExtensionKotlin::class.java,
+            project,
+            "keystore.properties"
+        )
         val keystoreProperties by project.extra(Properties().apply {
             load(BufferedReader(FileReader(project.file(keystorePropertiesExt.fullPath))))
         })
@@ -59,7 +65,7 @@ class AckeePluginKotlin : Plugin<Project> {
          */
         project.pluginManager.withPlugin("com.android.application") {
             val android = project.extensions.findByType(AppExtension::class.java) ?: throw Exception(
-                    "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
+                "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
             )
 
             project.afterEvaluate {
@@ -146,7 +152,6 @@ class AckeePluginKotlin : Plugin<Project> {
                     val renameTaskName = "checkChangelogFileTask${name.capitalize()}"
                     project.tasks.create(renameTaskName) {
                         doLast {
-                            println("In changelog creation")
                             val file = File("${project.rootDir}/outputs/changelog.txt")
                             if (!file.exists()) {
                                 file.createNewFile()
@@ -155,6 +160,26 @@ class AckeePluginKotlin : Plugin<Project> {
                     }
 
                     dependsOn(renameTaskName)
+                }
+            }
+
+            project.tasks.create("copyGitHooks", type = Copy::class) {
+                from("${project.rootDir}/.githooks")
+                into("${project.rootDir}/.git/hooks")
+            }
+
+            /**
+             * Before each assemble task of all build variants `copyGitHooks` task
+             * is registered. We need to copy git hooks from `.githooks` folder to .git/hooks because its the
+             * most universal cross-platform/cross-gitclients way how to achieve that everyone will use this hook.
+             * There is an assumption that everyone who will clone this repository will at least once run
+             * the app and then copy hooks so they will be applied to all developers.
+             */
+            project.tasks.whenTaskAdded {
+                android.applicationVariants.all {
+                    outputs.all {
+                        assemble.dependsOn(project.tasks["copyGitHooks"])
+                    }
                 }
             }
 
@@ -196,14 +221,14 @@ class AckeePluginKotlin : Plugin<Project> {
                 maybeCreate("debug").apply {
                     applicationIdSuffix = ".debug"
                     manifestPlaceholders = mapOf(
-                            "appNameSuffix" to " D"
+                        "appNameSuffix" to " D"
                     )
                 }
 
                 maybeCreate("beta").apply {
                     applicationIdSuffix = ".beta"
                     manifestPlaceholders = mapOf(
-                            "appNameSuffix" to " B " + android.defaultConfig.versionCode
+                        "appNameSuffix" to " B " + android.defaultConfig.versionCode
                     )
 
                     signingConfig = android.signingConfigs.getByName("debug")
