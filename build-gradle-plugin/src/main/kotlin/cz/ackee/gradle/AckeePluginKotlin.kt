@@ -8,11 +8,15 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
 import java.util.Properties
+
+
+private val logger = LoggerFactory.getLogger("ackee-gradle-plugin")
 
 class AckeePluginKotlin : Plugin<Project> {
 
@@ -205,11 +209,7 @@ class AckeePluginKotlin : Plugin<Project> {
                 }
             }
 
-            /**
-             * Set default version code to git commits count.
-             * User still can set their own value though.
-             */
-            android.defaultConfig.versionCode = gitCommitsCount
+            android.defaultConfig.versionCode = resolveVersionCode(project)
 
             /**
              * Defines standard build types: Debug, Beta and Release.
@@ -243,6 +243,23 @@ class AckeePluginKotlin : Plugin<Project> {
                     proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                 }
             }
+        }
+    }
+
+    /**
+     * Resolve app version code. If `CI_VERSION_CODE` environment variable is defined, try to parse that.
+     * Otherwise use git commits count.
+     */
+    private fun resolveVersionCode(project: Project): Int {
+        return if (System.getenv("CI_VERSION_CODE") != null) {
+            try {
+                Integer.parseInt(System.getenv("CI_VERSION_CODE").trim())
+            } catch (e: Exception) {
+                logger.warn("Exception while parsing CI_VERSION_CODE", e)
+                getGitCommitsCount(project)
+            }
+        } else {
+            getGitCommitsCount(project)
         }
     }
 }
