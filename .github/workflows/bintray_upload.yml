@@ -1,9 +1,9 @@
 name: Java CI
 
 on:
-  create:
+  push:
     tags:
-      - v*
+      - '*'
 
 jobs:
   build:
