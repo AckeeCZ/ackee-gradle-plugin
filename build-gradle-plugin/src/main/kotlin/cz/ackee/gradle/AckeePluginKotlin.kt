@@ -244,6 +244,10 @@ class AckeePluginKotlin : Plugin<Project> {
                 }
             }
         }
+
+        project.parent?.let {
+            setupCodeCoverageTasks(it)
+        }
     }
 
     /**
