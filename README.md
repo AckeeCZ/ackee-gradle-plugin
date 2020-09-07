@@ -94,6 +94,54 @@ appProperties {
 If folder `.githooks` exists within the repository content of this folder is copied to the `.git/hooks` folder. Thats because we want to have some
 hooks as part of the git repository and there is no standard way to do so.  
 
+### JaCoCo code coverage support
+
+For each module task `jacocoTestReport` is generated that generates html JaCoCo report. Also
+`jacocoFullReport` task is added for the whole project that aggregates results of all submodules
+tasks and generates html output to `build/reports/jacoco/html/index.html`. These configuration
+properties are present: 
+- `jacocoExcludedProjects` - string list of module names you want to exclude. Defaults to empty list.
+- `jacocoTestVariant` - build variant of the test against which code coverage is computed. Defaults to `devApiDebug` since it's the most common setup on Ackee projects.
+- `jacocoExcludedFiles` - string list of excluded file patterns that we don't want to include in code coverage report. Defaults to empty list. 
+
+Place your configuration file to `gradle/jacoco-config.gradle` in your project root.
+
+Example configuration
+
+```
+project.ext {
+    jacocoExcludedProjects = [
+            "features",
+            "libraries"
+    ]
+
+    jacocoTestVariant = "devApiDebug"
+
+    jacocoExcludedFiles = [
+            '**/*App.*',
+            '**/*Application*',
+            '**/*Activity*',
+            '**/*Fragment*',
+            '**/*View.*',
+            '**/*ViewGroup.*',
+            '**/*JsonAdapter.*',
+            '**/*Layout*',
+            '**/epoxy/**',
+            '**/di/**',
+            '**/*Dagger.*',
+            '**/ui_components/**',
+            "**/com/**",
+            "**/androidx/**",
+            "**/org/**",
+            "**/BuildConfig.*",
+            "**/*Model_.*",
+            "**/*styleable*",
+            "**/grpc/*",
+            "**/*Exception*",
+            "**DI**"
+    ]
+}
+```
 
 ## Usage
 
