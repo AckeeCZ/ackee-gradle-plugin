@@ -143,6 +143,11 @@ project.ext {
 }
 ```
 
+The last thing you need to do is to place to your root `build.gradle` this line at the end of the file so the ext properties are loaded within the project
+```
+apply from: "$rootDir/gradle/jacoco-config.gradle"
+```
+
 ## Usage
 
 It can be used in any (Android) project by adding classpath dependency into project's buildscript:
