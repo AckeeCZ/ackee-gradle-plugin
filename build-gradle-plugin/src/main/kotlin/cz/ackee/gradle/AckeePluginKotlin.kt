@@ -15,7 +15,6 @@ import java.io.File
 import java.io.FileReader
 import java.util.Properties
 
-
 private val logger = LoggerFactory.getLogger("ackee-gradle-plugin")
 
 class AckeePluginKotlin : Plugin<Project> {
@@ -220,14 +219,14 @@ class AckeePluginKotlin : Plugin<Project> {
             android.buildTypes {
                 maybeCreate("debug").apply {
                     applicationIdSuffix = ".debug"
-                    manifestPlaceholders = mapOf(
+                    manifestPlaceholders += mapOf(
                         "appNameSuffix" to " D"
                     )
                 }
 
                 maybeCreate("beta").apply {
                     applicationIdSuffix = ".beta"
-                    manifestPlaceholders = mapOf(
+                    manifestPlaceholders += mapOf(
                         "appNameSuffix" to " B " + android.defaultConfig.versionCode
                     )
 
