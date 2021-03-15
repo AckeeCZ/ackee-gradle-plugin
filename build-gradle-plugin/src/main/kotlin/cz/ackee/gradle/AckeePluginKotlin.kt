@@ -13,6 +13,7 @@ import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
+import java.net.URL
 import java.util.Properties
 
 private val logger = LoggerFactory.getLogger("ackee-gradle-plugin")
@@ -246,6 +247,17 @@ class AckeePluginKotlin : Plugin<Project> {
 
         project.parent?.let {
             setupCodeCoverageTasks(it)
+        }
+
+        project.tasks.create("fetchDetektConfig") {
+            group = "Reporting"
+            description = "Fetch newest detekt config from master branch of styleguide Ackee GitHub repo"
+
+            doLast {
+                val configText = URL("https://raw.githubusercontent.com/AckeeCZ/styleguide/master/android/detekt-config.yml").readText()
+                val configFile = File(project.rootDir, "detekt-config-common.yml")
+                configFile.writeText(configText)
+            }
         }
     }
 
