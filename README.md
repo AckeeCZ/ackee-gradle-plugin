@@ -1,5 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/ackeecz/gradle-plugin/build-gradle-plugin/images/download.svg) ](https://bintray.com/ackeecz/gradle-plugin/build-gradle-plugin/_latestVersion)
-
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/ackee-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/ackee-gradle-plugin)
 # Ackee gradle plugin
 
 The plugin configures gradle project in several ways:
@@ -228,8 +227,5 @@ repository.
 
 ## Publishing
 
-Plugins can be published to specialized Gradle repository https://plugins.gradle.org/. Unfortunately there were some
-problems syncing the project when the plugin was retrieved from Gradle repository. To work around the issue, the plugin
-is now uploaded to bintray and jcenter.
-
-Publishing process to bintray is the same as for any standard library.
+Plugin is stored on Maven Central repository. Publishing process is the same as for any other library
+stored on Maven Central and the guide for that can be found on Ackee Android hub.
