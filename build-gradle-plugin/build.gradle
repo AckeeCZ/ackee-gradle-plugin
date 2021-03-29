@@ -1,41 +1,20 @@
 plugins {
     id("org.gradle.kotlin.kotlin-dsl") version "1.4.2"
     id("java")
-    id("groovy")
     id("kotlin")
     id("java-gradle-plugin")
     id("maven-publish")
 }
 
 dependencies {
-    implementation(gradleApi())
-    implementation(localGroovy())
-    implementation("com.android.tools.build:gradle:4.1.0")
+    implementation("com.android.tools.build:gradle:$android_gradle_plugin_version")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
 }
 
 ext {
-    bintrayName = 'build-gradle-plugin'
-    publishedArtifactId = 'build-gradle-plugin'
-
-    libraryName = 'Ackee Gradle Plugin'
-    libraryDescription = 'Adds several extensions and tasks used in all our projects'
+    PUBLISH_ARTIFACT_ID = 'build-gradle-plugin'
+    POM_DESCRIPTION = 'Gradle plugin with some useful configuration shared among projects'
 }
 
-apply from: rootProject.file('gradle/bintray/install.gradle')
-apply from: rootProject.file('gradle/bintray/bintray.gradle')
-
-// This allows you to publish to local maven repository on your machine via publishToMavenLocal task
-// for testing purposes. You can then reference this plugin the standard way in your project but it
-// will be fetched from this local maven repository.
-publishing {
-    publications {
-        pluginPublication (MavenPublication) {
-            from components.java
-            groupId project.group
-            artifactId "build-gradle-plugin"
-            version project.version
-        }
-    }
-}
+apply from: "${rootProject.projectDir}/gradle/mavencentral/publish.gradle"
