@@ -1,4 +1,4 @@
-[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/ackee-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/ackee-gradle-plugin)
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/build-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.ackeecz/build-gradle-plugin)
 # Ackee gradle plugin
 
 The plugin configures gradle project in several ways:
