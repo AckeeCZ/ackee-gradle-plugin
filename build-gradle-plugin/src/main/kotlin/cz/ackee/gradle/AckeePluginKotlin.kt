@@ -180,8 +180,8 @@ class AckeePluginKotlin : Plugin<Project> {
              * the app and then copy hooks so they will be applied to all developers.
              */
             project.tasks.whenTaskAdded {
-                android.applicationVariants.all {
-                    outputs.all {
+                android.applicationVariants.forEach {
+                    it.outputs.all {
                         assemble.dependsOn(project.tasks["copyGitHooks"])
                     }
                 }
