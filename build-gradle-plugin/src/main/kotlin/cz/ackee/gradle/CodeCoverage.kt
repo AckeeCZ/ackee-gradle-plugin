@@ -23,7 +23,7 @@ fun setupCodeCoverageTasks(project: Project) {
         with(it) {
             plugins.apply("jacoco")
             extensions.configure(JacocoPluginExtension::class.java) {
-                this.toolVersion = "0.8.5"
+                this.toolVersion = "0.8.7"
             }
             tasks.create("jacocoTestReport", JacocoReport::class.java) {
                 group = "Reporting"
