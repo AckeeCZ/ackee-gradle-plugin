@@ -53,6 +53,9 @@ fun setupCodeCoverageTasks(project: Project) {
 
     // define aggregating task
     project.plugins.apply("jacoco")
+    project.extensions.configure(JacocoPluginExtension::class.java) {
+        this.toolVersion = "0.8.7"
+    }
     project.tasks.create("jacocoFullReport", JacocoReport::class.java) {
         group = "Reporting"
         description = "Generates an aggregate report from all subprojects"
