@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.3] - 2021-05-07
+### Fixed
+- Set JaCoCo 0.8.7 also for `jacocoFullReport` task
+
 ## [2.0.2] - 2021-05-06
 ### Changed
 - Updated JaCoCo version to 0.8.7, which is needed for Kotlin 1.5 to work
