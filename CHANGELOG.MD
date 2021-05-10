@@ -5,8 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Fixed
+### Changed
 - Beta builds enable resource shrinking
+- Beta builds use proguard-android-optimize.txt as release builds do. It should not have effect on R8 though.
 
 ## [2.0.3] - 2021-05-07
 ### Fixed
