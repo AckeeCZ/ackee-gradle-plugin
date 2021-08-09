@@ -74,10 +74,6 @@ fun setupCodeCoverageTasks(project: Project) {
             html.isEnabled = true
             html.destination = project.file("build/reports/jacoco/html")
         }
-
-        doFirst {
-            executionData.setFrom(project.files(executionData.filter { it.exists() }))
-        }
     }
 }
 

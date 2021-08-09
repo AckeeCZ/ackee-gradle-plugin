@@ -1,5 +1,5 @@
 plugins {
-    id("org.gradle.kotlin.kotlin-dsl") version "1.4.2"
+    id("org.gradle.kotlin.kotlin-dsl") version "2.1.4"
     id("java")
     id("kotlin")
     id("java-gradle-plugin")
@@ -9,8 +9,11 @@ plugins {
 dependencies {
     implementation("com.android.tools.build:gradle:$android_gradle_plugin_version")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
 }
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 ext {
     PUBLISH_ARTIFACT_ID = 'build-gradle-plugin'
