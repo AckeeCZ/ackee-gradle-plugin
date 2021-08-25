@@ -94,11 +94,32 @@ class AckeePluginKotlin : Plugin<Project> {
                         }
 
                         // if copyAndRenameAPKTask needs to automatically execute assemble before
-                        copyAndRenameAPKTask.dependsOn(variant.assemble)
-                        copyAndRenameAPKTask.mustRunAfter(variant.assemble)
+                        copyAndRenameAPKTask.dependsOn(variant.assembleProvider)
+                        copyAndRenameAPKTask.mustRunAfter(variant.assembleProvider)
 
                         // if assemble needs to automatically execute copyAndRenameAPKTask after
-                        variant.assemble.finalizedBy(copyAndRenameAPKTask)
+                        variant.assembleProvider.get().finalizedBy(copyAndRenameAPKTask)
+                    }
+
+                    // copy instrumentation APK used for testing to outputs/App-test.apk
+                    variant.testVariant?.let { testVariant ->
+                        val testApkFile = File(outputs, "App-test.apk")
+                        testVariant.outputs.forEach { output ->
+                            val testTaskName = "copyAndRename${variant.name.capitalize()}TestAPK"
+                            val copyAndRenameTestAPKTask = tasks.create(testTaskName, Copy::class.java) {
+                                from(output.outputFile.parent)
+                                into(outputs)
+                                include(output.outputFile.name)
+                                rename(output.outputFile.name, testApkFile.name)
+                            }
+
+                            // if copyAndRenameTestAPKTask needs to automatically execute assemble before
+                            copyAndRenameTestAPKTask.dependsOn(testVariant.assembleProvider)
+                            copyAndRenameTestAPKTask.mustRunAfter(testVariant.assembleProvider)
+
+                            // if assemble needs to automatically execute copyAndRenameTestAPKTask after
+                            testVariant.assembleProvider.get().finalizedBy(copyAndRenameTestAPKTask)
+                        }
                     }
                 }
 
@@ -137,9 +158,9 @@ class AckeePluginKotlin : Plugin<Project> {
                  */
                 android.applicationVariants.all {
                     if (buildType.isMinifyEnabled) {
-                        assemble.doLast {
+                        assembleProvider.get().doLast {
                             project.copy {
-                                from(mappingFile)
+                                from(mappingFileProvider.get())
                                 into(outputs)
                             }
                         }
@@ -180,9 +201,9 @@ class AckeePluginKotlin : Plugin<Project> {
              * the app and then copy hooks so they will be applied to all developers.
              */
             project.tasks.whenTaskAdded {
-                android.applicationVariants.forEach {
-                    it.outputs.all {
-                        assemble.dependsOn(project.tasks["copyGitHooks"])
+                android.applicationVariants.forEach { variant ->
+                    variant.outputs.all {
+                        variant.assembleProvider.get().dependsOn(project.tasks["copyGitHooks"])
                     }
                 }
             }
