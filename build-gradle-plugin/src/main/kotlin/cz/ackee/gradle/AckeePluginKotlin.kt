@@ -72,6 +72,13 @@ class AckeePluginKotlin : Plugin<Project> {
                 "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
             )
 
+            android.lintOptions.apply {
+                isCheckAllWarnings = true
+                isWarningsAsErrors = true
+                isAbortOnError = true
+                isCheckDependencies = true
+            }
+
             project.afterEvaluate {
 
                 val outputs = File(project.rootDir, "outputs")
@@ -164,6 +171,15 @@ class AckeePluginKotlin : Plugin<Project> {
                                 into(outputs)
                             }
                         }
+                    }
+                }
+
+                /**
+                 * Run "lint$BuildVariant" task before every "assemble$BuildVariant" tasks
+                 */
+                android.applicationVariants.forEach { variant ->
+                    if (variant.buildType.isMinifyEnabled) {
+                        variant.assembleProvider.get().dependsOn(tasks.named("lint${variant.name.capitalize()}"))
                     }
                 }
             }
