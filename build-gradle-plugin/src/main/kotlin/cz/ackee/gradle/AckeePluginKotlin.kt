@@ -1,6 +1,7 @@
 package cz.ackee.gradle
 
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
@@ -79,7 +80,7 @@ class AckeePluginKotlin : Plugin<Project> {
                 isCheckDependencies = true
             }
 
-            project.afterEvaluate {
+            with(project) {
 
                 val outputs = File(project.rootDir, "outputs")
                 outputs.mkdir()
@@ -87,11 +88,13 @@ class AckeePluginKotlin : Plugin<Project> {
                 /**
                  * Set output apk destination to file App.apk in outputs folder in project root
                  */
-                android.applicationVariants.forEach { variant ->
+                android.applicationVariants.configureEach {
+                    val variant = this
 
                     val apkFile = File(outputs, "App.apk")
 
-                    variant.outputs.forEach { output ->
+                    variant.outputs.configureEach {
+                        val output = this
                         val taskName = "copyAndRename${variant.name.capitalize()}APK"
                         val copyAndRenameAPKTask = tasks.create(taskName, Copy::class.java) {
                             from(output.outputFile.parent)
@@ -105,13 +108,14 @@ class AckeePluginKotlin : Plugin<Project> {
                         copyAndRenameAPKTask.mustRunAfter(variant.assembleProvider)
 
                         // if assemble needs to automatically execute copyAndRenameAPKTask after
-                        variant.assembleProvider.get().finalizedBy(copyAndRenameAPKTask)
+                        variant.assembleProvider.configure { finalizedBy(copyAndRenameAPKTask) }
                     }
 
                     // copy instrumentation APK used for testing to outputs/App-test.apk
                     variant.testVariant?.let { testVariant ->
                         val testApkFile = File(outputs, "App-test.apk")
-                        testVariant.outputs.forEach { output ->
+                        testVariant.outputs.configureEach {
+                            val output = this
                             val testTaskName = "copyAndRename${variant.name.capitalize()}TestAPK"
                             val copyAndRenameTestAPKTask = tasks.create(testTaskName, Copy::class.java) {
                                 from(output.outputFile.parent)
@@ -125,7 +129,7 @@ class AckeePluginKotlin : Plugin<Project> {
                             copyAndRenameTestAPKTask.mustRunAfter(testVariant.assembleProvider)
 
                             // if assemble needs to automatically execute copyAndRenameTestAPKTask after
-                            testVariant.assembleProvider.get().finalizedBy(copyAndRenameTestAPKTask)
+                            testVariant.assembleProvider.configure { finalizedBy(copyAndRenameTestAPKTask) }
                         }
                     }
                 }
@@ -135,7 +139,8 @@ class AckeePluginKotlin : Plugin<Project> {
                  * app bundle is done. This task will copy generated aab file to `outputs/App.aab` file where
                  * CI server expects it.
                  */
-                android.applicationVariants.forEach { variant ->
+                android.applicationVariants.configureEach {
+                    val variant = this
 
                     val aabFile = File(outputs, "App.aab")
 
@@ -163,7 +168,7 @@ class AckeePluginKotlin : Plugin<Project> {
                 /**
                  * Copy mapping.txt from its location to outputs folder in project root
                  */
-                android.applicationVariants.all {
+                android.applicationVariants.configureEach {
                     if (buildType.isMinifyEnabled) {
                         assembleProvider.get().doLast {
                             project.copy {
@@ -177,9 +182,10 @@ class AckeePluginKotlin : Plugin<Project> {
                 /**
                  * Run "lint$BuildVariant" task before every "assemble$BuildVariant" tasks
                  */
-                android.applicationVariants.forEach { variant ->
+                android.applicationVariants.configureEach {
+                    val variant = this
                     if (variant.buildType.isMinifyEnabled) {
-                        variant.assembleProvider.get().dependsOn(tasks.named("lint${variant.name.capitalize()}"))
+                        variant.assembleProvider.dependsOn(tasks.named("lint${variant.name.capitalize()}"))
                     }
                 }
             }
@@ -216,11 +222,11 @@ class AckeePluginKotlin : Plugin<Project> {
              * There is an assumption that everyone who will clone this repository will at least once run
              * the app and then copy hooks so they will be applied to all developers.
              */
-            project.tasks.whenTaskAdded {
-                android.applicationVariants.forEach { variant ->
-                    variant.outputs.all {
-                        variant.assembleProvider.get().dependsOn(project.tasks["copyGitHooks"])
-                    }
+
+            android.applicationVariants.configureEach {
+                val variant = this
+                variant.outputs.configureEach {
+                    variant.assembleProvider.get().dependsOn(project.tasks["copyGitHooks"])
                 }
             }
 
