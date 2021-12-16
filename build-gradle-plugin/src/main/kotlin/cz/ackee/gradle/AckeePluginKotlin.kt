@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
 import java.net.URL
-import java.util.Properties
+import java.util.*
 
 private val logger = LoggerFactory.getLogger("ackee-gradle-plugin")
 
@@ -184,7 +184,7 @@ class AckeePluginKotlin : Plugin<Project> {
                  */
                 android.applicationVariants.configureEach {
                     val variant = this
-                    if (variant.buildType.isMinifyEnabled) {
+                    if (!variant.buildType.isDebuggable) {
                         variant.assembleProvider.dependsOn(tasks.named("lint${variant.name.capitalize()}"))
                     }
                 }
