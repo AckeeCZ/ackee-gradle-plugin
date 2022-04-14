@@ -48,16 +48,17 @@ class AckeePluginKotlin : Plugin<Project> {
             "keystore.properties"
         )
         val keystoreProperties by project.extra(Properties().apply {
-            load(BufferedReader(FileReader(project.file(keystorePropertiesExt.fullPath))))
+            val keystorePropertiesFile = project.file(keystorePropertiesExt.fullPath)
+            if (keystorePropertiesFile.exists()) {
+                loadKeystoreProperties(keystorePropertiesFile)
+            }
         })
 
         /**
          * Define properties with application info
          */
         val appPropertiesExt = project.extensions.create("appProperties", PropertiesExtensionKotlin::class.java, project, "app.properties")
-        val appProperties by project.extra(Properties().apply {
-            load(BufferedReader(FileReader(project.file(appPropertiesExt.fullPath))))
-        })
+        val appProperties by project.extra(Properties().loadKeystoreProperties(project.file(appPropertiesExt.fullPath)))
 
         /**
          * Number of git commits.
@@ -239,9 +240,11 @@ class AckeePluginKotlin : Plugin<Project> {
 
                 maybeCreate("release").apply {
                     keyAlias = keystoreProperties["key_alias"] as String?
-                    storeFile = File(keystoreDir, keystoreProperties["key_file"] as String?)
                     storePassword = keystoreProperties["key_password"] as String?
                     keyPassword = keystoreProperties["key_password"] as String?
+
+                    val keystoreFileName = keystoreProperties["key_file"] as String? ?: ""
+                    storeFile = File(keystoreDir, keystoreFileName)
                 }
 
                 maybeCreate("debug").apply {
@@ -303,6 +306,12 @@ class AckeePluginKotlin : Plugin<Project> {
                 configFile.writeText(configText)
             }
         }
+    }
+
+    private fun Properties.loadKeystoreProperties(keystorePropertiesFile: File) {
+        val fileReader = FileReader(keystorePropertiesFile)
+        val bufferedReader = BufferedReader(fileReader)
+        load(bufferedReader)
     }
 
     /**
