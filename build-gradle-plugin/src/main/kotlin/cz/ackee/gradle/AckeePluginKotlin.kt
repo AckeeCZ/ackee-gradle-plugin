@@ -308,10 +308,11 @@ class AckeePluginKotlin : Plugin<Project> {
         }
     }
 
-    private fun Properties.loadKeystoreProperties(keystorePropertiesFile: File) {
+    private fun Properties.loadKeystoreProperties(keystorePropertiesFile: File): Properties {
         val fileReader = FileReader(keystorePropertiesFile)
         val bufferedReader = BufferedReader(fileReader)
         load(bufferedReader)
+        return this
     }
 
     /**
