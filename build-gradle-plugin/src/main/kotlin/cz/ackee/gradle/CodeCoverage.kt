@@ -23,7 +23,7 @@ fun setupCodeCoverageTasks(project: Project) {
         with(it) {
             plugins.apply("jacoco")
             extensions.configure(JacocoPluginExtension::class.java) {
-                this.toolVersion = "0.8.7"
+                this.toolVersion = "0.8.8"
             }
             tasks.create("jacocoTestReport", JacocoReport::class.java) {
                 group = "Reporting"
@@ -45,7 +45,11 @@ fun setupCodeCoverageTasks(project: Project) {
                 classDirectories.setFrom(files(listOf(kotlinTree, javacTree)))
                 executionData.setFrom(fileTree(mapOf(
                     "dir" to buildDir,
-                    "includes" to listOf("jacoco/test${testVariant.capitalize()}UnitTest.exec", "outputs/code-coverage/connected/*coverage.ec")
+                    "includes" to listOf(
+                        "jacoco/test${testVariant.capitalize()}UnitTest.exec",
+                        "outputs/unit_test_code_coverage/${testVariant}UnitTest/test${testVariant.capitalize()}UnitTest.exec",
+                        "outputs/code-coverage/connected/*coverage.ec"
+                    )
                 )))
             }
         }

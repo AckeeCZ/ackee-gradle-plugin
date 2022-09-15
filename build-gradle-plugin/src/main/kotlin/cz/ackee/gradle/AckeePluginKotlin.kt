@@ -192,7 +192,7 @@ class AckeePluginKotlin : Plugin<Project> {
             }
 
             /**
-             * App Distribution expects changelog in file `outputs/changelog.txt` where Jenkins store the changelog. If this file does
+             * App Distribution expects changelog in file `outputs/changelog.txt` where CI store the changelog. If this file does
              * not exist upload fails. This task ensures that the file exists
              */
             project.tasks.whenTaskAdded {
