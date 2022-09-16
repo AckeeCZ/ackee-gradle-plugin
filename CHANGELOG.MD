@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.3.1] - 2022-09-16
+
+### Fixed
+- Add new jacoco execution data path 
+
 ## [2.2.0] - 2021-12-16
 
 ### Added
