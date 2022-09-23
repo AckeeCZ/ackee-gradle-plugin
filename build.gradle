@@ -1,9 +1,0 @@
-plugins {
-    alias libs.plugins.kotlin apply false
-    alias libs.plugins.kotlin.dsl apply false
-    alias libs.plugins.kotlin.dokka apply false
-    alias libs.plugins.nexus.staging
-}
-
-ext.libProperties = new Properties()
-ext.libProperties.load(file("${rootDir}/lib.properties").newReader())
