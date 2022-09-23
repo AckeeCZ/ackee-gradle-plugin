@@ -1,0 +1,19 @@
+[versions]
+androidGradlePlugin = "7.3.0"
+kotlin = "1.7.10"
+kotlin-dsl = "3.1.0"
+nexus = "0.22.0"
+
+[libraries]
+android-tools-build = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-dsl = { id = "org.gradle.kotlin.kotlin-dsl", version.ref = "kotlin-dsl" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
+nexus-staging = { id = "io.codearte.nexus-staging", version.ref = "nexus" }
