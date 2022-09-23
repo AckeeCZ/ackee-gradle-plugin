@@ -1,9 +1,10 @@
 plugins {
-    id("java")
-    id("kotlin")
+    alias libs.plugins.kotlin
+    alias libs.plugins.kotlin.dsl
+    alias libs.plugins.kotlin.dokka
+    alias libs.plugins.nexus.staging
     id("java-gradle-plugin")
     id("maven-publish")
-    id("org.gradle.kotlin.kotlin-dsl")
 }
 
 dependencies {
@@ -19,5 +20,18 @@ ext {
     PUBLISH_ARTIFACT_ID = 'build-gradle-plugin'
     POM_DESCRIPTION = 'Gradle plugin with some useful configuration shared among projects'
 }
+
+ext.libProperties = new Properties()
+ext.libProperties.load(file("${rootDir}/lib.properties").newReader())
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'cz.ackee.build'
+            implementationClass = 'cz.ackee.gradle.AckeePluginKotlin'
+        }
+    }
+}
+
 
 apply from: "${rootProject.projectDir}/gradle/mavencentral/publish.gradle"
