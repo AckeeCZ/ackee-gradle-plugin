@@ -35,6 +35,11 @@ gradlePlugin {
             id = "cz.ackee.verifications"
             implementationClass = "cz.ackee.gradle.plugin.VerificationsPlugin"
         }
+
+        register("variantsPlugin") {
+            id = "cz.ackee.variants"
+            implementationClass = "cz.ackee.gradle.plugin.VariantsPlugin"
+        }
     }
 }
 

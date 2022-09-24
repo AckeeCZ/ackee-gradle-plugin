@@ -37,22 +37,6 @@ class AckeePluginKotlin : Plugin<Project> {
 
     override fun apply(project: Project) {
         /**
-         * Define properties with keystore info
-         */
-        val keystorePropertiesExt = project.extensions.create(
-            "keystoreProperties",
-            PropertiesExtensionKotlin::class.java,
-            project,
-            "keystore.properties"
-        )
-        val keystoreProperties by project.extra(Properties().apply {
-            val keystorePropertiesFile = project.file(keystorePropertiesExt.fullPath)
-            if (keystorePropertiesFile.exists()) {
-                loadKeystoreProperties(keystorePropertiesFile)
-            }
-        })
-
-        /**
          * Define properties with application info
          */
         val appPropertiesExt = project.extensions.create("appProperties", PropertiesExtensionKotlin::class.java, project, "app.properties")
@@ -222,65 +206,7 @@ class AckeePluginKotlin : Plugin<Project> {
                 }
             }
 
-            /**
-             * Defines standard signing configs for debugging and release.
-             * Keystores must be located in keystore directory in project's root directory.
-             */
-            android.signingConfigs {
-                val keystoreDir = File(project.rootDir, "keystore")
-
-                maybeCreate("release").apply {
-                    keyAlias = keystoreProperties["key_alias"] as String?
-                    storePassword = keystoreProperties["key_password"] as String?
-                    keyPassword = keystoreProperties["key_password"] as String?
-
-                    val keystoreFileName = keystoreProperties["key_file"] as String? ?: ""
-                    storeFile = File(keystoreDir, keystoreFileName)
-                }
-
-                maybeCreate("debug").apply {
-                    keyAlias = "androiddebugkey"
-                    storeFile = File(keystoreDir, "debug.keystore")
-                    storePassword = "android"
-                    keyPassword = "android"
-                }
-            }
-
             android.defaultConfig.versionCode = resolveVersionCode(project)
-
-            /**
-             * Defines standard build types: Debug, Beta and Release.
-             * **Debug** type should be used only during development
-             * **Beta** is used for internal testing
-             * **Release** is used in production
-             */
-            android.buildTypes {
-                maybeCreate("debug").apply {
-                    applicationIdSuffix = ".debug"
-                    manifestPlaceholders += mapOf(
-                        "appNameSuffix" to " D"
-                    )
-                }
-
-                maybeCreate("beta").apply {
-                    applicationIdSuffix = ".beta"
-                    manifestPlaceholders += mapOf(
-                        "appNameSuffix" to " B " + android.defaultConfig.versionCode
-                    )
-
-                    signingConfig = android.signingConfigs.getByName("debug")
-                    isMinifyEnabled = true
-                    isShrinkResources = true
-                    proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                }
-
-                maybeCreate("release").apply {
-                    signingConfig = android.signingConfigs.getByName("release")
-                    isMinifyEnabled = true
-                    isShrinkResources = true
-                    proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                }
-            }
         }
     }
 
