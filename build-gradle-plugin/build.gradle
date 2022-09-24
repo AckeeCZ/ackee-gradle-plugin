@@ -26,9 +26,14 @@ ext.libProperties.load(file("${rootDir}/lib.properties").newReader())
 
 gradlePlugin {
     plugins {
-        simplePlugin {
+        register("ackeePlugin") {
             id = 'cz.ackee.build'
             implementationClass = 'cz.ackee.gradle.AckeePluginKotlin'
+        }
+
+        register("verificationsPlugin") {
+            id = "cz.ackee.verifications"
+            implementationClass = "cz.ackee.gradle.plugin.VerificationsPlugin"
         }
     }
 }

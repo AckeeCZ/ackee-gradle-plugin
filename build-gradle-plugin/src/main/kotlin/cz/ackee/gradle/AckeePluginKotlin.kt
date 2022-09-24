@@ -14,8 +14,7 @@ import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
-import java.net.URL
-import java.util.*
+import java.util.Properties
 
 private val logger = LoggerFactory.getLogger("ackee-gradle-plugin")
 
@@ -37,7 +36,6 @@ class AckeePluginKotlin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-
         /**
          * Define properties with keystore info
          */
@@ -73,13 +71,6 @@ class AckeePluginKotlin : Plugin<Project> {
             val android = project.extensions.findByType(AppExtension::class.java) ?: throw Exception(
                 "Not an Android application. Did you forget to apply 'com.android.application' plugin?"
             )
-
-            android.lintOptions.apply {
-                isCheckAllWarnings = true
-                isWarningsAsErrors = true
-                isAbortOnError = true
-                isCheckDependencies = true
-            }
 
             with(project) {
 
@@ -289,21 +280,6 @@ class AckeePluginKotlin : Plugin<Project> {
                     isShrinkResources = true
                     proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                 }
-            }
-        }
-
-        project.parent?.let {
-            setupCodeCoverageTasks(it)
-        }
-
-        project.tasks.create("fetchDetektConfig") {
-            group = "Reporting"
-            description = "Fetch newest detekt config from master branch of styleguide Ackee GitHub repo"
-
-            doLast {
-                val configText = URL("https://raw.githubusercontent.com/AckeeCZ/styleguide/master/android/detekt-config.yml").readText()
-                val configFile = File(project.rootDir, "detekt-config-common.yml")
-                configFile.writeText(configText)
             }
         }
     }
