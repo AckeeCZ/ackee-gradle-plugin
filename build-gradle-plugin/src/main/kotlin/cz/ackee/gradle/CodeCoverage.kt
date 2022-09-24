@@ -7,6 +7,8 @@ import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
 /**
+ * TODO refactor this a bit
+ *
  * Setup JaCoCo code coverage tasks. First create a task for each submodule that computes
  * coverage for that module. Then define task that aggregates those results and prints full
  * report for the whole project.
@@ -43,14 +45,18 @@ fun setupCodeCoverageTasks(project: Project) {
 
                 sourceDirectories.setFrom(files(listOf(mainJavaSrc, mainKotlinSrc)))
                 classDirectories.setFrom(files(listOf(kotlinTree, javacTree)))
-                executionData.setFrom(fileTree(mapOf(
-                    "dir" to buildDir,
-                    "includes" to listOf(
-                        "jacoco/test${testVariant.capitalize()}UnitTest.exec",
-                        "outputs/unit_test_code_coverage/${testVariant}UnitTest/test${testVariant.capitalize()}UnitTest.exec",
-                        "outputs/code-coverage/connected/*coverage.ec"
+                executionData.setFrom(
+                    fileTree(
+                        mapOf(
+                            "dir" to buildDir,
+                            "includes" to listOf(
+                                "jacoco/test${testVariant.capitalize()}UnitTest.exec",
+                                "outputs/unit_test_code_coverage/${testVariant}UnitTest/test${testVariant.capitalize()}UnitTest.exec",
+                                "outputs/code-coverage/connected/*coverage.ec"
+                            )
+                        )
                     )
-                )))
+                )
             }
         }
     }

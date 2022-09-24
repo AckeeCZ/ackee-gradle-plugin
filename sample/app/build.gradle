@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("cz.ackee.build")
+    id("cz.ackee.verifications")
 }
 
 android {
