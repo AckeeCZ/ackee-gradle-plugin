@@ -4,6 +4,7 @@ plugins {
     //id("cz.ackee.build")
     id("cz.ackee.verifications")
     id("cz.ackee.variants")
+    id("cz.ackee.artifacts.copy")
 }
 
 android {

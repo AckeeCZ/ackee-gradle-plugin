@@ -13,9 +13,6 @@ dependencies {
     implementation(libs.kotlin.stdlib)
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
-
 ext {
     PUBLISH_ARTIFACT_ID = 'build-gradle-plugin'
     POM_DESCRIPTION = 'Gradle plugin with some useful configuration shared among projects'
@@ -39,6 +36,11 @@ gradlePlugin {
         register("variantsPlugin") {
             id = "cz.ackee.variants"
             implementationClass = "cz.ackee.gradle.plugin.VariantsPlugin"
+        }
+
+        register("copyArtifactsPlugin") {
+            id = "cz.ackee.artifacts.copy"
+            implementationClass = "cz.ackee.gradle.plugin.CopyArtifactsPlugin"
         }
     }
 }

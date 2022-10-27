@@ -38,6 +38,6 @@ local.properties
 Thumbs.db
 thumbs.db
 
-outputs/mapping.txt
+outputs/*
 
 artwork
