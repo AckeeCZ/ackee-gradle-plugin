@@ -1,6 +1,5 @@
 package cz.ackee.gradle.plugin
 
-import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.AppExtension
 import cz.ackee.gradle.PropertiesExtensionKotlin
 import cz.ackee.gradle.getAndroidAppExtensionOrThrow
@@ -21,11 +20,6 @@ class VariantsPlugin : Plugin<Project> {
         val android = project.getAndroidAppExtensionOrThrow()
         android.createSignings(project)
         android.createVariants()
-
-        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
-        androidComponents.onVariants {
-            println("Variant ${it.name}")
-        }
     }
 
     // TODO refactor keystore properties

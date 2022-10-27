@@ -62,89 +62,9 @@ class AckeePluginKotlin : Plugin<Project> {
                 outputs.mkdir()
 
                 /**
-                 * Set output apk destination to file App.apk in outputs folder in project root
-                 */
-                android.applicationVariants.configureEach {
-                    val variant = this
-
-                    val apkFile = File(outputs, "App.apk")
-
-                    variant.outputs.configureEach {
-                        val output = this
-                        val taskName = "copyAndRename${variant.name.capitalize()}APK"
-                        val copyAndRenameAPKTask = tasks.create(taskName, Copy::class.java) {
-                            from(output.outputFile.parent)
-                            into(outputs)
-                            include(output.outputFile.name)
-                            rename(output.outputFile.name, apkFile.name)
-                        }
-
-                        // if copyAndRenameAPKTask needs to automatically execute assemble before
-                        copyAndRenameAPKTask.dependsOn(variant.assembleProvider)
-                        copyAndRenameAPKTask.mustRunAfter(variant.assembleProvider)
-
-                        // if assemble needs to automatically execute copyAndRenameAPKTask after
-                        variant.assembleProvider.configure { finalizedBy(copyAndRenameAPKTask) }
-                    }
-
-                    // copy instrumentation APK used for testing to outputs/App-test.apk
-                    variant.testVariant?.let { testVariant ->
-                        val testApkFile = File(outputs, "App-test.apk")
-                        testVariant.outputs.configureEach {
-                            val output = this
-                            val testTaskName = "copyAndRename${variant.name.capitalize()}TestAPK"
-                            val copyAndRenameTestAPKTask = tasks.create(testTaskName, Copy::class.java) {
-                                from(output.outputFile.parent)
-                                into(outputs)
-                                include(output.outputFile.name)
-                                rename(output.outputFile.name, testApkFile.name)
-                            }
-
-                            // if copyAndRenameTestAPKTask needs to automatically execute assemble before
-                            copyAndRenameTestAPKTask.dependsOn(testVariant.assembleProvider)
-                            copyAndRenameTestAPKTask.mustRunAfter(testVariant.assembleProvider)
-
-                            // if assemble needs to automatically execute copyAndRenameTestAPKTask after
-                            testVariant.assembleProvider.configure { finalizedBy(copyAndRenameTestAPKTask) }
-                        }
-                    }
-                }
-
-                /**
-                 * Create dynamic task for each of `bundleXXX` tasks that will be performed after creation of
-                 * app bundle is done. This task will copy generated aab file to `outputs/App.aab` file where
-                 * CI server expects it.
-                 */
-                android.applicationVariants.configureEach {
-                    val variant = this
-
-                    val aabFile = File(outputs, "App.aab")
-
-                    val taskName = "copyAndRename${variant.name.capitalize()}Aab"
-                    val copyAndRenameAABTask = tasks.create(taskName, Copy::class.java) {
-                        val path = "${buildDir}/outputs/bundle/${variant.name}/"
-                        val flavorName = if (variant.flavorName.isNullOrEmpty()) "" else "-${variant.flavorName}"
-                        val aabName = "app$flavorName-${variant.buildType.name}.aab"
-
-                        from(path)
-                        into(outputs)
-                        include(aabName)
-                        rename(aabName, aabFile.name)
-                    }
-
-                    val bundleTask = tasks.named("bundle${variant.name.capitalize()}").get()
-                    // if copyAndRenameAABTask needs to automatically execute assemble before
-                    copyAndRenameAABTask.dependsOn(bundleTask)
-                    copyAndRenameAABTask.mustRunAfter(bundleTask)
-
-                    // if assemble needs to automatically execute copyAndRenameAABTask after
-                    bundleTask.finalizedBy(copyAndRenameAABTask)
-                }
-
-                /**
                  * Copy mapping.txt from its location to outputs folder in project root
                  */
-                android.applicationVariants.configureEach {
+                /*android.applicationVariants.configureEach {
                     if (buildType.isMinifyEnabled) {
                         assembleProvider.get().doLast {
                             project.copy {
@@ -153,7 +73,7 @@ class AckeePluginKotlin : Plugin<Project> {
                             }
                         }
                     }
-                }
+                }*/
 
                 /**
                  * Run "lint$BuildVariant" task before every "assemble$BuildVariant" tasks
