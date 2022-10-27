@@ -1,7 +1,7 @@
 package cz.ackee.gradle.plugin
 
-import com.android.build.gradle.AppExtension
-import cz.ackee.gradle.getAndroidAppExtensionOrThrow
+import com.android.build.api.dsl.Lint
+import cz.ackee.gradle.getAndroidComponents
 import cz.ackee.gradle.setupCodeCoverageTasks
 import cz.ackee.gradle.task.FetchDetektConfigTask
 import org.gradle.api.Plugin
@@ -14,8 +14,10 @@ class VerificationsPlugin : Plugin<Project> {
         project.setupDetekt()
         project.setupCodeCoverage()
 
-        val android = project.getAndroidAppExtensionOrThrow()
-        android.setupLint()
+        val androidComponents = project.getAndroidComponents()
+        androidComponents.finalizeDsl {
+            it.lint { setup() }
+        }
     }
 
     private fun Project.setupDetekt() {
@@ -27,14 +29,11 @@ class VerificationsPlugin : Plugin<Project> {
         project.parent?.let(::setupCodeCoverageTasks)
     }
 
-    // TODO resolve this deprecation
-    private fun AppExtension.setupLint() {
-        lintOptions.apply {
-            isCheckAllWarnings = true
-            isWarningsAsErrors = true
-            isAbortOnError = true
-            isCheckDependencies = true
-        }
+    private fun Lint.setup() {
+        checkAllWarnings = true
+        warningsAsErrors = true
+        abortOnError = true
+        checkDependencies = true
     }
 
     companion object {
