@@ -15,6 +15,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
 
 abstract class GetApkArtifactTask : DefaultTask() {
@@ -40,10 +41,10 @@ abstract class GetApkArtifactTask : DefaultTask() {
 
     companion object {
 
-        private const val taskName = "GetApkArtifact"
+        private const val taskName = "getApkArtifact"
 
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetApkArtifactTask> {
-            return project.tasks.register<GetApkArtifactTask>(getTaskName(variant)) {
+            return project.tasks.register<GetApkArtifactTask>(createTaskName(variant)) {
                 builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
                 apkOutputFilePath.set(project.layout.buildDirectory.file("apk-location"))
                 group = Groups.WIP
@@ -54,6 +55,6 @@ abstract class GetApkArtifactTask : DefaultTask() {
             }
         }
 
-        private fun getTaskName(variant: Variant) = "${variant.name}$taskName"
+        private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
     }
 }

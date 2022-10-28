@@ -27,8 +27,7 @@ abstract class FetchDetektConfigTask : DefaultTask() {
 
     companion object {
 
-        // TODO rename
-        private const val taskName = "fetchDetektConfig2"
+        private const val taskName = "fetchDetektConfig"
 
         fun registerTask(project: Project, url: String, outputFile: File): TaskProvider<FetchDetektConfigTask> {
             return project.tasks.register(taskName, FetchDetektConfigTask::class.java) {

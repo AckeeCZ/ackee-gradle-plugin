@@ -10,6 +10,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
 
 abstract class GetBundleArtifactTask : DefaultTask() {
@@ -31,10 +32,10 @@ abstract class GetBundleArtifactTask : DefaultTask() {
 
     companion object {
 
-        private const val taskName = "GetBundleArtifact"
+        private const val taskName = "getBundleArtifact"
 
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetBundleArtifactTask> {
-            return project.tasks.register<GetBundleArtifactTask>(getTaskName(variant)) {
+            return project.tasks.register<GetBundleArtifactTask>(createTaskName(variant)) {
                 aabOutputFilePath.set(project.layout.buildDirectory.file("aab-location"))
                 group = Groups.WIP
             }.also {
@@ -44,6 +45,6 @@ abstract class GetBundleArtifactTask : DefaultTask() {
             }
         }
 
-        private fun getTaskName(variant: Variant) = "${variant.name}$taskName"
+        private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
     }
 }

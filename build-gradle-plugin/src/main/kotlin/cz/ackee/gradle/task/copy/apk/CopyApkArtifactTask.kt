@@ -5,11 +5,12 @@ import cz.ackee.gradle.task.Groups
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 
 object CopyApkArtifactTask {
 
-    private const val taskName = "CopyApk"
+    private const val taskName = "copyApk"
     private const val targetFileName = "App.apk"
 
     fun registerTask(
@@ -33,5 +34,5 @@ object CopyApkArtifactTask {
         }
     }
 
-    private fun createTaskName(variant: Variant) = "${variant.name}$taskName"
+    private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
 }

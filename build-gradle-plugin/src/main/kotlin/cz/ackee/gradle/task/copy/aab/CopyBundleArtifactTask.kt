@@ -5,11 +5,13 @@ import cz.ackee.gradle.task.Groups
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
+import org.gradle.kotlin.dsl.register
 import java.io.File
 
 object CopyBundleArtifactTask {
 
-    private const val taskName = "CopyBundle"
+    private const val taskName = "copyBundle"
     private const val targetFileName = "App.aab"
 
     fun registerTask(
@@ -18,7 +20,7 @@ object CopyBundleArtifactTask {
         getBundleArtifactTaskProvider: TaskProvider<GetBundleArtifactTask>,
         output: File,
     ): TaskProvider<Copy> {
-        return project.tasks.register(createTaskName(variant), Copy::class.java) {
+        return project.tasks.register<Copy>(createTaskName(variant)) {
             dependsOn(getBundleArtifactTaskProvider.name)
 
             val bundleFileLocation = getBundleArtifactTaskProvider.get()
@@ -34,5 +36,5 @@ object CopyBundleArtifactTask {
         }
     }
 
-    private fun createTaskName(variant: Variant) = "${variant.name}$taskName"
+    private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
 }

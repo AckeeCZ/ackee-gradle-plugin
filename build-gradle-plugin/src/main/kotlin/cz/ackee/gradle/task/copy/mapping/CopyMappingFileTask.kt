@@ -3,28 +3,57 @@ package cz.ackee.gradle.task.copy.mapping
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.Variant
 import cz.ackee.gradle.task.Groups
+import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
+import org.gradle.kotlin.dsl.register
 import java.io.File
 
-object CopyMappingFileTask {
+abstract class CopyMappingFileTask : DefaultTask() {
 
-    private const val taskName = "CopyMappingFile"
+    @get:InputFile
+    @get:Optional
+    abstract val inputMappingFile: RegularFileProperty
 
-    fun registerTask(
-        project: Project,
-        variant: Variant,
-        output: File,
-    ): TaskProvider<Copy> {
-        return project.tasks.register(createTaskName(variant), Copy::class.java) {
-            val aabFile = variant.artifacts.get(SingleArtifact.OBFUSCATION_MAPPING_FILE).orNull?.asFile
+    @get:OutputDirectory
+    abstract val outputMappingFile: DirectoryProperty
 
-            from(aabFile)
-            into(output)
-            group = Groups.WIP
+    @TaskAction
+    fun onTaskExecution() {
+        if (inputMappingFile.isPresent) {
+            val inputFile = inputMappingFile.get().asFile
+            val outputFile = File(outputMappingFile.get().asFile, inputFile.name)
+            if (outputFile.exists()) {
+                outputFile.delete()
+            }
+
+            inputFile.copyTo(outputFile)
         }
     }
 
-    private fun createTaskName(variant: Variant) = "${variant.name}$taskName"
+    companion object {
+
+        private const val taskName = "copyMappingFile"
+
+        fun registerTask(
+            project: Project,
+            variant: Variant,
+            output: File,
+        ): TaskProvider<CopyMappingFileTask> {
+            return project.tasks.register<CopyMappingFileTask>(createTaskName(variant)) {
+                inputMappingFile.set(variant.artifacts.get(SingleArtifact.OBFUSCATION_MAPPING_FILE))
+                outputMappingFile.set(output)
+                group = Groups.WIP
+            }
+        }
+
+        private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
+    }
 }
