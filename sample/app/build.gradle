@@ -1,24 +1,21 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    //id("cz.ackee.build")
-    id("cz.ackee.verifications")
-    id("cz.ackee.variants")
-    id("cz.ackee.artifacts.copy")
+    id("cz.ackee.plugin")
 }
 
 android {
+    def appProperties = project.ext.appProperties
+
     compileSdkVersion(30)
 
     defaultConfig {
         minSdkVersion(21)
         targetSdkVersion(30)
-        applicationId = "cz.ackee.sample"
-        versionName = "1.0.0"
-        versionCode = 10
+        applicationId = appProperties["package_name"]
+        versionName = appProperties["version_name"]
 
         manifestPlaceholders = [appName: "Gradle build"]
-
     }
 }
 
