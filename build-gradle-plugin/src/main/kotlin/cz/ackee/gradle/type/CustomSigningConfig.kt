@@ -1,7 +1,5 @@
 package cz.ackee.gradle.type
 
-import com.android.build.gradle.internal.dsl.SigningConfig
-import org.gradle.api.NamedDomainObjectContainer
 import java.io.File
 
 sealed class CustomSigningConfig {
@@ -11,15 +9,6 @@ sealed class CustomSigningConfig {
     abstract val storePassword: String?
     abstract val keyPassword: String?
     abstract val storeFile: File?
-
-    fun maybeCreate(container: NamedDomainObjectContainer<SigningConfig>) {
-        container.maybeCreate(name).apply {
-            keyAlias = this@CustomSigningConfig.keyAlias
-            storePassword = this@CustomSigningConfig.storePassword
-            keyPassword = this@CustomSigningConfig.keyPassword
-            storeFile = this@CustomSigningConfig.storeFile
-        }
-    }
 
     class Debug(keystoreDir: File) : CustomSigningConfig() {
 

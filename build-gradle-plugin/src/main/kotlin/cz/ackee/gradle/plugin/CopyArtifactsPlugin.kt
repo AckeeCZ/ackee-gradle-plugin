@@ -1,6 +1,6 @@
 package cz.ackee.gradle.plugin
 
-import cz.ackee.gradle.getAndroidComponents
+import cz.ackee.gradle.getApplicationAndroidComponents
 import cz.ackee.gradle.task.copy.aab.CopyBundleArtifactTask
 import cz.ackee.gradle.task.copy.aab.GetBundleArtifactTask
 import cz.ackee.gradle.task.copy.apk.CopyApkArtifactTask
@@ -13,7 +13,7 @@ import java.io.File
 class CopyArtifactsPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val androidComponents = project.getAndroidComponents()
+        val androidComponents = project.getApplicationAndroidComponents()
         val outputs = File(project.rootDir, "outputs")
 
         androidComponents.onVariants { variant ->

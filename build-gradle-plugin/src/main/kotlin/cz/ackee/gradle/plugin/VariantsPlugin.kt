@@ -1,10 +1,13 @@
 package cz.ackee.gradle.plugin
 
-import com.android.build.gradle.AppExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import cz.ackee.gradle.PropertiesExtensionKotlin
-import cz.ackee.gradle.getAndroidAppExtensionOrThrow
-import cz.ackee.gradle.type.CustomBuildType
-import cz.ackee.gradle.type.CustomSigningConfig
+import cz.ackee.gradle.getApplicationAndroidComponents
+import cz.ackee.gradle.task.GetVersionCodeTask
+import cz.ackee.gradle.type.CustomBuildTypeCreator
+import cz.ackee.gradle.type.CustomBuildTypeFactory
+import cz.ackee.gradle.type.CustomSigningConfigCreator
+import cz.ackee.gradle.type.CustomSigningConfigFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
@@ -17,13 +20,24 @@ import java.util.Properties
 class VariantsPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val android = project.getAndroidAppExtensionOrThrow()
-        android.createSignings(project)
-        android.createVariants()
+        val androidComponents = project.getApplicationAndroidComponents()
+        androidComponents.createSignings(project)
+        val versionCodeTaskProvider = GetVersionCodeTask.registerTask(project)
+        androidComponents.createBuildTypes(versionCodeTaskProvider.get().versionCodeFile.get().asFile.readText().toInt())
     }
 
-    // TODO refactor keystore properties
-    private fun AppExtension.createSignings(project: Project) {
+    private fun ApplicationAndroidComponentsExtension.createSignings(project: Project) {
+        val keystoreProperties = parseKeystoreProperties(project)
+        val factory = CustomSigningConfigFactory(project, keystoreProperties)
+        val customSigningConfigs = factory.createSigningConfigs()
+
+        finalizeDsl { application ->
+            val creator = CustomSigningConfigCreator(application.signingConfigs)
+            customSigningConfigs.forEach(creator::maybeCreate)
+        }
+    }
+
+    private fun parseKeystoreProperties(project: Project): Properties {
         val keystorePropertiesExt = project.extensions.create(
             "keystoreProperties",
             PropertiesExtensionKotlin::class.java,
@@ -36,24 +50,7 @@ class VariantsPlugin : Plugin<Project> {
                 loadKeystoreProperties(keystorePropertiesFile)
             }
         })
-        val keystoreDir = File(project.rootDir, "keystore")
-
-        val customSigningConfigs = listOf(
-            CustomSigningConfig.Debug(keystoreDir),
-            CustomSigningConfig.Release(
-                keystoreDir = keystoreDir,
-                storeFileName = keystoreProperties["key_file"] as String? ?: "",
-                storePassword = keystoreProperties["key_password"] as String?,
-                keyAlias = keystoreProperties["key_alias"] as String?,
-                keyPassword = keystoreProperties["key_password"] as String?
-            )
-        )
-
-        signingConfigs {
-            customSigningConfigs.forEach { signingConfig ->
-                signingConfig.maybeCreate(this)
-            }
-        }
+        return keystoreProperties
     }
 
     private fun Properties.loadKeystoreProperties(keystorePropertiesFile: File): Properties {
@@ -63,21 +60,12 @@ class VariantsPlugin : Plugin<Project> {
         return this
     }
 
-    private fun AppExtension.createVariants() {
-        val versionCode = defaultConfig.versionCode ?: 0
-        val customBuildTypes = listOf(
-            CustomBuildType.Debug,
-            CustomBuildType.Beta(versionCode),
-            CustomBuildType.Release
-        )
-
-        buildTypes {
-            customBuildTypes.forEach { buildType ->
-                buildType.maybeCreate(
-                    container = this,
-                    android = this@createVariants
-                )
-            }
+    private fun ApplicationAndroidComponentsExtension.createBuildTypes(versionCode: Int) {
+        val factory = CustomBuildTypeFactory(versionCode)
+        val customBuildTypes = factory.createBuildTypes()
+        finalizeDsl { application ->
+            val creator = CustomBuildTypeCreator(application.buildTypes, application.signingConfigs)
+            customBuildTypes.forEach(creator::maybeCreate)
         }
     }
 }

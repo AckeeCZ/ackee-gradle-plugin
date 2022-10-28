@@ -1,9 +1,5 @@
 package cz.ackee.gradle.type
 
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.internal.dsl.BuildType
-import org.gradle.api.NamedDomainObjectContainer
-
 sealed class CustomBuildType {
 
     abstract val name: String
@@ -13,20 +9,6 @@ sealed class CustomBuildType {
     abstract val isMinifyEnabled: Boolean
     abstract val isShrinkResources: Boolean
     abstract val enableProguard: Boolean
-
-    fun maybeCreate(container: NamedDomainObjectContainer<BuildType>, android: AppExtension) {
-        container.maybeCreate(name).apply {
-            applicationIdSuffix = appIdSuffix
-            appNameSuffix?.let { manifestPlaceholders += mapOf("appNameSuffix" to it) }
-            signingConfigName?.let { signingConfig = android.signingConfigs.getByName(it) }
-            isMinifyEnabled = this@CustomBuildType.isMinifyEnabled
-            isShrinkResources = this@CustomBuildType.isShrinkResources
-
-            if (enableProguard) {
-                proguardFiles(android.getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            }
-        }
-    }
 
     object Debug : CustomBuildType() {
 

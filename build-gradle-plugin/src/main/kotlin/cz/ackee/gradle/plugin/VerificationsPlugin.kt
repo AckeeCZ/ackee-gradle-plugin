@@ -1,7 +1,7 @@
 package cz.ackee.gradle.plugin
 
 import com.android.build.api.dsl.Lint
-import cz.ackee.gradle.getAndroidComponents
+import cz.ackee.gradle.getApplicationAndroidComponents
 import cz.ackee.gradle.setupCodeCoverageTasks
 import cz.ackee.gradle.task.FetchDetektConfigTask
 import org.gradle.api.Plugin
@@ -14,7 +14,7 @@ class VerificationsPlugin : Plugin<Project> {
         project.setupDetekt()
         project.setupCodeCoverage()
 
-        val androidComponents = project.getAndroidComponents()
+        val androidComponents = project.getApplicationAndroidComponents()
         androidComponents.finalizeDsl {
             it.lint { setup() }
         }
