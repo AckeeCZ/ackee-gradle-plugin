@@ -1,7 +1,7 @@
 [versions]
 androidGradlePlugin = "7.3.1"
-kotlin = "1.7.10"
-kotlin-dsl = "3.1.0"
+kotlin = "1.6.21"
+kotlin-dsl = "2.3.3"
 nexus = "0.22.0"
 
 [libraries]

@@ -1,5 +1,6 @@
 package cz.ackee.gradle.task.copy.githooks
 
+import cz.ackee.gradle.task.Groups
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
@@ -13,6 +14,8 @@ object CopyGitHooksTask {
         return project.tasks.register<Copy>(taskName) {
             from("${project.rootDir}/.githooks")
             into("${project.rootDir}/.git/hooks")
+
+            group = Groups.VERIFICATION
         }
     }
 }

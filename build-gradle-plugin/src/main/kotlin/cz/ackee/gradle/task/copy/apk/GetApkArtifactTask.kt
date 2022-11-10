@@ -37,6 +37,8 @@ abstract class GetApkArtifactTask : DefaultTask() {
         val builtArtifacts = builtArtifactsLoader.get().load(apkInputFolder.get()) ?: throw RuntimeException("Cannot load artifacts")
         val artifact = builtArtifacts.elements.first()
         apkOutputFilePath.get().asFile.writeText(artifact.outputFile)
+
+        apkOutputFolder.asFileTree.plus(apkInputFolder.files())
     }
 
     companion object {
@@ -46,8 +48,10 @@ abstract class GetApkArtifactTask : DefaultTask() {
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetApkArtifactTask> {
             return project.tasks.register<GetApkArtifactTask>(createTaskName(variant)) {
                 builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
-                apkOutputFilePath.set(project.layout.buildDirectory.file("apk-location"))
-                group = Groups.WIP
+                val outputFile = project.layout.buildDirectory.file("apk-location").get().asFile
+                outputFile.createNewFile()
+                apkOutputFilePath.set(outputFile)
+                group = Groups.DEPLOYMENT
             }.also {
                 variant.artifacts.use(it)
                     .wiredWithDirectories(GetApkArtifactTask::apkInputFolder, GetApkArtifactTask::apkOutputFolder)

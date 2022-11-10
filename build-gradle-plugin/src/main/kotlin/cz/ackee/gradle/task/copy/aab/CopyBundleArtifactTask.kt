@@ -2,8 +2,8 @@ package cz.ackee.gradle.task.copy.aab
 
 import com.android.build.api.variant.Variant
 import cz.ackee.gradle.task.Groups
+import cz.ackee.gradle.task.copy.FileCopyTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
@@ -19,8 +19,8 @@ object CopyBundleArtifactTask {
         variant: Variant,
         getBundleArtifactTaskProvider: TaskProvider<GetBundleArtifactTask>,
         output: File,
-    ): TaskProvider<Copy> {
-        return project.tasks.register<Copy>(createTaskName(variant)) {
+    ): TaskProvider<FileCopyTask> {
+        return project.tasks.register<FileCopyTask>(createTaskName(variant)) {
             dependsOn(getBundleArtifactTaskProvider.name)
 
             val bundleFileLocation = getBundleArtifactTaskProvider.get()
@@ -29,10 +29,9 @@ object CopyBundleArtifactTask {
 
             val bundleFile = File(bundleFileLocation)
 
-            from(bundleFile)
-            into(output)
-            rename(bundleFile.name, targetFileName)
-            group = Groups.WIP
+            from.set(bundleFile)
+            to.set(File(output, targetFileName))
+            group = Groups.DEPLOYMENT
         }
     }
 
