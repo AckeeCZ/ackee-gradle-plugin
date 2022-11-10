@@ -28,6 +28,8 @@ abstract class GetBundleArtifactTask : DefaultTask() {
     fun onTaskExecution() {
         val artifact = aabOutputFile.get().asFile
         aabOutputFilePath.get().asFile.writeText(artifact.absolutePath)
+
+        aabInputFile.get().asFile.copyTo(aabOutputFile.get().asFile)
     }
 
     companion object {
@@ -36,8 +38,10 @@ abstract class GetBundleArtifactTask : DefaultTask() {
 
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetBundleArtifactTask> {
             return project.tasks.register<GetBundleArtifactTask>(createTaskName(variant)) {
-                aabOutputFilePath.set(project.layout.buildDirectory.file("aab-location"))
-                group = Groups.WIP
+                val outputFile = project.layout.buildDirectory.file("aab-location").get().asFile
+                outputFile.createNewFile()
+                aabOutputFilePath.set(outputFile)
+                group = Groups.DEPLOYMENT
             }.also {
                 variant.artifacts.use(it)
                     .wiredWithFiles(GetBundleArtifactTask::aabInputFile, GetBundleArtifactTask::aabOutputFile)

@@ -2,13 +2,15 @@ package cz.ackee.gradle
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.getByType
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.util.Properties
 
-fun Project.getApplicationAndroidComponents(): ApplicationAndroidComponentsExtension =
-    project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+fun Project.getApplicationAndroidComponents(): ApplicationAndroidComponentsExtension {
+    return project.extensions.getByType()
+}
 
 fun Properties.loadPropertiesFile(file: File): Properties {
     val fileReader = FileReader(file)

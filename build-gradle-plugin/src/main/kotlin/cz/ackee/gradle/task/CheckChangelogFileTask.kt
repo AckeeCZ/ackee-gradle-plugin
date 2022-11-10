@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
-class CheckChangelogFileTask : DefaultTask() {
+abstract class CheckChangelogFileTask : DefaultTask() {
 
     @TaskAction
     fun onTaskExecution() {
@@ -24,6 +24,7 @@ class CheckChangelogFileTask : DefaultTask() {
         fun registerTask(project: Project, appDistributionUploadTask: Task) {
             project.tasks.register<CheckChangelogFileTask>(createTaskName(appDistributionUploadTask)) {
                 appDistributionUploadTask.dependsOn(this)
+                group = Groups.DEPLOYMENT
             }
         }
 

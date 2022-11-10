@@ -53,7 +53,6 @@ class VerificationsPlugin : Plugin<Project> {
 
     companion object {
 
-        // TODO move this to Extension?
         private const val DETEKT_CONFIG_URL = "https://raw.githubusercontent.com/AckeeCZ/styleguide/master/android/detekt-config.yml"
     }
 }

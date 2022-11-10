@@ -50,7 +50,7 @@ abstract class CopyMappingFileTask : DefaultTask() {
             return project.tasks.register<CopyMappingFileTask>(createTaskName(variant)) {
                 inputMappingFile.set(variant.artifacts.get(SingleArtifact.OBFUSCATION_MAPPING_FILE))
                 outputMappingFile.set(output)
-                group = Groups.WIP
+                group = Groups.DEPLOYMENT
             }
         }
 
