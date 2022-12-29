@@ -48,8 +48,7 @@ abstract class GetApkArtifactTask : DefaultTask() {
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetApkArtifactTask> {
             return project.tasks.register<GetApkArtifactTask>(createTaskName(variant)) {
                 builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
-                val outputFile = project.layout.buildDirectory.file("apk-location").get().asFile
-                outputFile.createNewFile()
+                val outputFile = project.layout.buildDirectory.file("apk-location")
                 apkOutputFilePath.set(outputFile)
                 group = Groups.DEPLOYMENT
             }.also {

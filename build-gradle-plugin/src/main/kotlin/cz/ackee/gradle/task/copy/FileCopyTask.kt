@@ -5,11 +5,12 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 
 abstract class FileCopyTask : DefaultTask() {
 
     @get:InputFile
-    abstract val from: RegularFileProperty
+    abstract val fromPath: RegularFileProperty
 
     @get:OutputFile
     abstract val to: RegularFileProperty
@@ -21,6 +22,11 @@ abstract class FileCopyTask : DefaultTask() {
             toFile.delete()
         }
 
-        from.get().asFile.copyTo(toFile)
+        val fromFile = fromPath.get()
+            .asFile
+            .readText()
+            .let(::File)
+
+        fromFile.copyTo(toFile)
     }
 }

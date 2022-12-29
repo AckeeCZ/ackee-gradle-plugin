@@ -4,7 +4,6 @@ import com.android.build.api.variant.Variant
 import cz.ackee.gradle.task.Groups
 import cz.ackee.gradle.task.copy.FileCopyTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
@@ -22,14 +21,8 @@ object CopyApkArtifactTask {
         output: File,
     ): TaskProvider<FileCopyTask> {
         return project.tasks.register<FileCopyTask>(createTaskName(variant)) {
-            dependsOn(getApkArtifactTaskProvider.name)
-
-            val apkFileLocation = getApkArtifactTaskProvider.get()
-                .apkOutputFilePath.get()
-                .asFile.readText()
-            val apkFile = File(apkFileLocation)
-
-            from.set(apkFile)
+            val apkFilePath = getApkArtifactTaskProvider.get().apkOutputFilePath
+            fromPath.set(apkFilePath)
             to.set(File(output, targetFileName))
             group = Groups.DEPLOYMENT
         }
