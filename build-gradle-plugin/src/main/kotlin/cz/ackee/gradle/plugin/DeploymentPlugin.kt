@@ -1,7 +1,7 @@
 package cz.ackee.gradle.plugin
 
 import com.android.build.api.variant.ApplicationVariant
-import cz.ackee.gradle.getApplicationAndroidComponents
+import cz.ackee.gradle.util.getApplicationAndroidComponents
 import cz.ackee.gradle.task.CheckChangelogFileTask
 import cz.ackee.gradle.task.copy.aab.CopyBundleArtifactTask
 import cz.ackee.gradle.task.copy.aab.GetBundleArtifactTask

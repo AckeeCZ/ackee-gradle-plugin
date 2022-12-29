@@ -2,8 +2,8 @@ package cz.ackee.gradle.plugin
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import cz.ackee.gradle.PropertiesExtensionKotlin
-import cz.ackee.gradle.getApplicationAndroidComponents
-import cz.ackee.gradle.loadPropertiesFile
+import cz.ackee.gradle.util.getApplicationAndroidComponents
+import cz.ackee.gradle.util.loadPropertiesFile
 import cz.ackee.gradle.type.CustomBuildTypeCreator
 import cz.ackee.gradle.type.CustomBuildTypeFactory
 import cz.ackee.gradle.type.CustomSigningConfigCreator

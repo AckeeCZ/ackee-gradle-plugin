@@ -1,4 +1,4 @@
-package cz.ackee.gradle
+package cz.ackee.gradle.util
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import org.gradle.api.Project

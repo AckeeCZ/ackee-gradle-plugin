@@ -1,7 +1,7 @@
 package cz.ackee.gradle.plugin
 
 import com.android.build.api.dsl.Lint
-import cz.ackee.gradle.getApplicationAndroidComponents
+import cz.ackee.gradle.util.getApplicationAndroidComponents
 import cz.ackee.gradle.setupCodeCoverageTasks
 import cz.ackee.gradle.task.FetchDetektConfigTask
 import cz.ackee.gradle.task.copy.githooks.CopyGitHooksTask

@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.0.0] - 2022-12-29
+- Plugin rewrite to the new Android gradle plugin API
+- Remove running lint on each non-debug build
+  - It causes slow builds and lint should run only on CI
+
 ## [2.3.1] - 2022-09-16
 
 ### Fixed
