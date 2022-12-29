@@ -1,8 +1,8 @@
 package cz.ackee.gradle.plugin
 
 import cz.ackee.gradle.PropertiesExtensionKotlin
-import cz.ackee.gradle.getApplicationAndroidComponents
-import cz.ackee.gradle.loadPropertiesFile
+import cz.ackee.gradle.util.getApplicationAndroidComponents
+import cz.ackee.gradle.util.loadPropertiesFile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra

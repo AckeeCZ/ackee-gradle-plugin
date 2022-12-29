@@ -7,6 +7,10 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
+/**
+ * App Distribution expects changelog in file `outputs/changelog.txt` where CI store the changelog. If this file does
+ * not exist upload fails. This task ensures that the file exists
+ */
 abstract class CheckChangelogFileTask : DefaultTask() {
 
     @TaskAction

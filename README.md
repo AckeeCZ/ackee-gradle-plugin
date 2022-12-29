@@ -173,12 +173,27 @@ directory to a file `detekt-config-common.yml`.
 
 ## Usage
 
-It can be used in any (Android) project by adding classpath dependency into project's buildscript:
+It can be used in any (Android) project by adding plugin in the project's `build.gradle` file:
 
+``` groovy
+plugins {
+    id "cz.ackee.build" version "3.0.0" apply false
+    
+    // or
+    
+    id "cz.ackee.verifications" version "3.0.0" apply false
+    id "cz.ackee.variants" version "3.0.0" apply false
+    id "cz.ackee.deployment" version "3.0.0" apply false
+    id "cz.ackee.config" version "3.0.0" apply false
+}
 ```
+
+Or you can use the old way: 
+
+``` groovy
 buildscript {
     dependencies {
-        classpath("io.github.ackeecz:build-gradle-plugin:2.0.0")
+        classpath("io.github.ackeecz:build-gradle-plugin:3.0.0")
     }
 }
 ```
@@ -188,8 +203,20 @@ and applying the plugin in the app's module:
 ```
 plugins {
     id("cz.ackee.build")
+    
+    // or
+    
+    id("cz.ackee.verifications")
+    id("cz.ackee.variants")
+    id("cz.ackee.deployment")
+    id("cz.ackee.config")
 }
 ```
+- `cz.ackee.build` contains everything
+- `cz.ackee.verifications` sets up detekt, code coverage, lint, copying git hooks
+- `cz.ackee.variants` configures build types and signing
+- `cz.ackee.deployment` copies artifacts and checks changelog
+- `cz.ackee.config` provides `app.properties` and sets `versionCode`
 
 App's `keystore.properties` and `app.properties` locations can be changed using
 `keystoreProperties` and `appProperties` such as:
