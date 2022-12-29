@@ -38,8 +38,7 @@ abstract class GetBundleArtifactTask : DefaultTask() {
 
         fun registerTask(project: Project, variant: Variant): TaskProvider<GetBundleArtifactTask> {
             return project.tasks.register<GetBundleArtifactTask>(createTaskName(variant)) {
-                val outputFile = project.layout.buildDirectory.file("aab-location").get().asFile
-                outputFile.createNewFile()
+                val outputFile = project.layout.buildDirectory.file("aab-location")
                 aabOutputFilePath.set(outputFile)
                 group = Groups.DEPLOYMENT
             }.also {

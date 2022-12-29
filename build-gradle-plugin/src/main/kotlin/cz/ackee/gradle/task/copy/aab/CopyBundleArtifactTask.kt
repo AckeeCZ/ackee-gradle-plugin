@@ -21,15 +21,8 @@ object CopyBundleArtifactTask {
         output: File,
     ): TaskProvider<FileCopyTask> {
         return project.tasks.register<FileCopyTask>(createTaskName(variant)) {
-            dependsOn(getBundleArtifactTaskProvider.name)
-
-            val bundleFileLocation = getBundleArtifactTaskProvider.get()
-                .aabOutputFilePath.get()
-                .asFile.readText()
-
-            val bundleFile = File(bundleFileLocation)
-
-            from.set(bundleFile)
+            val bundleFilePath = getBundleArtifactTaskProvider.get().aabOutputFilePath
+            fromPath.set(bundleFilePath)
             to.set(File(output, targetFileName))
             group = Groups.DEPLOYMENT
         }
