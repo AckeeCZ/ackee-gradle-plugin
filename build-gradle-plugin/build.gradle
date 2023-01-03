@@ -42,7 +42,7 @@ gradlePlugin {
             implementationClass = "cz.ackee.gradle.plugin.DeploymentPlugin"
         }
 
-        register("configuraAppPlugin") {
+        register("configureAppPlugin") {
             id = "cz.ackee.config"
             implementationClass = "cz.ackee.gradle.plugin.ConfigureAppPlugin"
         }
