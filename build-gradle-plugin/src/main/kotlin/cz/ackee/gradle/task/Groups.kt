@@ -2,7 +2,7 @@ package cz.ackee.gradle.task
 
 object Groups {
 
-    const val REPORTING = "Reporting"
-    const val DEPLOYMENT = "Deployment"
-    const val VERIFICATION = "Verification"
+    const val REPORTING = "reporting"
+    const val DEPLOYMENT = "deployment"
+    const val VERIFICATION = "verification"
 }
