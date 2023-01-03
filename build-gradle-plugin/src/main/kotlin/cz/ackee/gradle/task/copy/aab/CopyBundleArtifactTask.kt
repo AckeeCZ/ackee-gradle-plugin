@@ -9,24 +9,27 @@ import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
-object CopyBundleArtifactTask {
+abstract class CopyBundleArtifactTask : FileCopyTask() {
 
-    private const val taskName = "copyBundle"
-    private const val targetFileName = "App.aab"
+    companion object {
 
-    fun registerTask(
-        project: Project,
-        variant: Variant,
-        getBundleArtifactTaskProvider: TaskProvider<GetBundleArtifactTask>,
-        output: File,
-    ): TaskProvider<FileCopyTask> {
-        return project.tasks.register<FileCopyTask>(createTaskName(variant)) {
-            val bundleFilePath = getBundleArtifactTaskProvider.get().aabOutputFilePath
-            fromPath.set(bundleFilePath)
-            to.set(File(output, targetFileName))
-            group = Groups.DEPLOYMENT
+        private const val taskName = "copyBundle"
+        private const val targetFileName = "App.aab"
+
+        fun registerTask(
+            project: Project,
+            variant: Variant,
+            getBundleArtifactTaskProvider: TaskProvider<GetBundleArtifactTask>,
+            output: File,
+        ): TaskProvider<CopyBundleArtifactTask> {
+            return project.tasks.register<CopyBundleArtifactTask>(createTaskName(variant)) {
+                val bundleFilePath = getBundleArtifactTaskProvider.get().aabOutputFilePath
+                fromPath.set(bundleFilePath)
+                to.set(File(output, targetFileName))
+                group = Groups.DEPLOYMENT
+            }
         }
-    }
 
-    private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
+        private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
+    }
 }

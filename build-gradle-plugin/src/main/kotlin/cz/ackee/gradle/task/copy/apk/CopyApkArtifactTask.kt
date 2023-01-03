@@ -9,24 +9,27 @@ import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
-object CopyApkArtifactTask {
+abstract class CopyApkArtifactTask : FileCopyTask() {
 
-    private const val taskName = "copyApk"
-    private const val targetFileName = "App.apk"
+    companion object {
 
-    fun registerTask(
-        project: Project,
-        variant: Variant,
-        getApkArtifactTaskProvider: TaskProvider<GetApkArtifactTask>,
-        output: File,
-    ): TaskProvider<FileCopyTask> {
-        return project.tasks.register<FileCopyTask>(createTaskName(variant)) {
-            val apkFilePath = getApkArtifactTaskProvider.get().apkOutputFilePath
-            fromPath.set(apkFilePath)
-            to.set(File(output, targetFileName))
-            group = Groups.DEPLOYMENT
+        private const val taskName = "copyApk"
+        private const val targetFileName = "App.apk"
+
+        fun registerTask(
+            project: Project,
+            variant: Variant,
+            getApkArtifactTaskProvider: TaskProvider<GetApkArtifactTask>,
+            output: File,
+        ): TaskProvider<CopyApkArtifactTask> {
+            return project.tasks.register<CopyApkArtifactTask>(createTaskName(variant)) {
+                val apkFilePath = getApkArtifactTaskProvider.get().apkOutputFilePath
+                fromPath.set(apkFilePath)
+                to.set(File(output, targetFileName))
+                group = Groups.DEPLOYMENT
+            }
         }
-    }
 
-    private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
+        private fun createTaskName(variant: Variant) = "$taskName${variant.name.capitalized()}"
+    }
 }
