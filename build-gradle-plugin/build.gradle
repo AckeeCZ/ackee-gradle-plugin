@@ -9,7 +9,6 @@ plugins {
 
 dependencies {
     implementation(libs.android.tools.build)
-    implementation(libs.kotlin.gradlePlugin)
     implementation(libs.kotlin.stdlib)
 }
 
