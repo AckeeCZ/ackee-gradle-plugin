@@ -8,7 +8,9 @@ sealed class CustomBuildType {
     abstract val signingConfigName: String?
     abstract val isMinifyEnabled: Boolean
     abstract val isShrinkResources: Boolean
-    abstract val enableProguard: Boolean
+
+    val enableProguard: Boolean
+        get() = isMinifyEnabled || isShrinkResources
 
     object Debug : CustomBuildType() {
 
@@ -18,7 +20,6 @@ sealed class CustomBuildType {
         override val signingConfigName = null
         override val isMinifyEnabled = false
         override val isShrinkResources = false
-        override val enableProguard = false
     }
 
     class Beta(versionCode: Int) : CustomBuildType() {
@@ -29,7 +30,6 @@ sealed class CustomBuildType {
         override val signingConfigName = "debug"
         override val isMinifyEnabled = true
         override val isShrinkResources = true
-        override val enableProguard = true
     }
 
     object Release : CustomBuildType() {
@@ -40,6 +40,5 @@ sealed class CustomBuildType {
         override val signingConfigName = "release"
         override val isMinifyEnabled = true
         override val isShrinkResources = true
-        override val enableProguard = true
     }
 }
