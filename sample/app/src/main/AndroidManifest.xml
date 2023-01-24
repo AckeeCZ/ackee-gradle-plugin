@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="false"
-        android:label="${appName}${appNameSuffix}">
+        android:label="${appName}">
 
     </application>
 

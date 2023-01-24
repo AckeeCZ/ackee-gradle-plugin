@@ -23,27 +23,27 @@ ext.libProperties.load(file("${rootDir}/lib.properties").newReader())
 gradlePlugin {
     plugins {
         register("ackeeGradlePlugin") {
-            id = 'cz.ackee.build'
+            id = 'io.github.ackeecz.plugin.build'
             implementationClass = 'cz.ackee.gradle.plugin.AckeeGradlePlugin'
         }
 
         register("verificationsPlugin") {
-            id = "cz.ackee.verifications"
+            id = "io.github.ackeecz.plugin.verifications"
             implementationClass = "cz.ackee.gradle.plugin.VerificationsPlugin"
         }
 
         register("variantsPlugin") {
-            id = "cz.ackee.variants"
+            id = "io.github.ackeecz.plugin.variants"
             implementationClass = "cz.ackee.gradle.plugin.VariantsPlugin"
         }
 
         register("deploymentPlugin") {
-            id = "cz.ackee.deployment"
+            id = "io.github.ackeecz.plugin.deployment"
             implementationClass = "cz.ackee.gradle.plugin.DeploymentPlugin"
         }
 
         register("configureAppPlugin") {
-            id = "cz.ackee.config"
+            id = "io.github.ackeecz.plugin.config"
             implementationClass = "cz.ackee.gradle.plugin.ConfigureAppPlugin"
         }
     }
