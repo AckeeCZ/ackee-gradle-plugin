@@ -25,6 +25,8 @@ class ConfigureAppPlugin : Plugin<Project> {
             this,
             "app.properties"
         )
+
+        @Suppress("UNUSED_VARIABLE")
         val appProperties by extra(Properties().apply {
             val keystorePropertiesFile = file(keystorePropertiesExt.fullPath)
             if (keystorePropertiesFile.exists()) {
