@@ -16,6 +16,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 - Add new jacoco execution data path 
+- Keystore properties not properly loaded.
+
+## [2.3.0]
+
+### Added
+
+- Prevents release builds from failing when there is no `keystore.properties` file in the project.  
+Release builds can still be built locally if you define a local `keystore.properties` file like:  
+```
+# keystore.properties
+# keystore file should be located in a dir named keystore/ in the project root
+#   E.G. MyApp/keystore/debug.keystore
+key_alias=[project]
+key_password=[keystore password]
+key_file=[keystore file name] # E.G. debug.keystore
+```
 
 ## [2.2.0] - 2021-12-16
 
