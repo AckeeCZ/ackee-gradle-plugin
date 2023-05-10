@@ -1,5 +1,6 @@
 package cz.ackee.gradle
 
+import cz.ackee.gradle.util.capitalizeFirstChar
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.kotlin.dsl.extra
@@ -13,7 +14,8 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
  * coverage for that module. Then define task that aggregates those results and prints full
  * report for the whole project.
  */
-fun setupCodeCoverageTasks(project: Project) {
+@Suppress("UNCHECKED_CAST")
+fun setUpCodeCoverageTasks(project: Project) {
     val excludedProjects = (project.extra.getIfExists("jacocoExcludedProjects") as? List<String>) ?: emptyList()
     val testVariant = (project.extra.getIfExists("jacocoTestVariant") as? String) ?: "devApiDebug"
     val excludedFiles = (project.extra.getIfExists("jacocoExcludedFiles") as? List<String>) ?: emptyList()
@@ -31,7 +33,7 @@ fun setupCodeCoverageTasks(project: Project) {
                 group = "Reporting"
                 description = "Generate Jacoco coverage"
 
-                this.dependsOn("test${testVariant.capitalize()}UnitTest")
+                this.dependsOn("test${testVariant.capitalizeFirstChar()}UnitTest")
                 reports {
                     csv.required.set(false)
                     xml.required.set(false)
@@ -50,8 +52,8 @@ fun setupCodeCoverageTasks(project: Project) {
                         mapOf(
                             "dir" to buildDir,
                             "includes" to listOf(
-                                "jacoco/test${testVariant.capitalize()}UnitTest.exec",
-                                "outputs/unit_test_code_coverage/${testVariant}UnitTest/test${testVariant.capitalize()}UnitTest.exec",
+                                "jacoco/test${testVariant.capitalizeFirstChar()}UnitTest.exec",
+                                "outputs/unit_test_code_coverage/${testVariant}UnitTest/test${testVariant.capitalizeFirstChar()}UnitTest.exec",
                                 "outputs/code-coverage/connected/*coverage.ec"
                             )
                         )

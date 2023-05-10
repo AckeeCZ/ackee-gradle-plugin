@@ -1,7 +1,7 @@
 plugins {
     alias libs.plugins.kotlin
-    alias libs.plugins.kotlin.dsl
     alias libs.plugins.kotlin.dokka
+    alias libs.plugins.kotlin.dsl
     alias libs.plugins.nexus.staging
     id("java-gradle-plugin")
     id("maven-publish")
@@ -9,7 +9,6 @@ plugins {
 
 dependencies {
     implementation(libs.android.tools.build)
-    implementation(libs.kotlin.stdlib)
 }
 
 ext {
