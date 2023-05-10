@@ -32,7 +32,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Assemble
-        run: ./gradlew :build-gradle-plugin:assemble :sample:app:assemble
+        run: ./gradlew :build-gradle-plugin:assemble
       - name: Publish to Maven Central
         run: ./gradlew :build-gradle-plugin:publishReleasePublicationToSonatypeRepository --max-workers 1 :build-gradle-plugin:closeAndReleaseRepository
         env:
