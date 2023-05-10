@@ -33,9 +33,9 @@ fun setupCodeCoverageTasks(project: Project) {
 
                 this.dependsOn("test${testVariant.capitalize()}UnitTest")
                 reports {
-                    csv.isEnabled = false
-                    xml.isEnabled = false
-                    html.isEnabled = true
+                    csv.required.set(false)
+                    xml.required.set(false)
+                    html.required.set(true)
                 }
 
                 val kotlinTree = fileTree(mapOf("dir" to "${buildDir}/tmp/kotlin-classes/$testVariant", "excludes" to excludedFiles))
@@ -81,8 +81,8 @@ fun setupCodeCoverageTasks(project: Project) {
         executionData.setFrom(project.files(jacocoReportTasks.map { it.executionData }))
 
         reports {
-            html.isEnabled = true
-            html.destination = project.file("build/reports/jacoco/html")
+            html.required.set(true)
+            html.outputLocation.set(project.file("build/reports/jacoco/html"))
         }
     }
 }
