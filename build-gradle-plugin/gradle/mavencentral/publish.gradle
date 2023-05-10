@@ -131,6 +131,11 @@ publishing {
 
 signing {
     sign publishing.publications
+
+    // TODO Probably not the ideal solution, but I have no idea how to solve that properly. Gradle
+    //  complains that there is no explicit/implicit dependency between task assembling the jar and
+    //  signReleasePublication which signs it. This mustRunAfter constrain makes it explicit.
+    tasks.getByName("signReleasePublication").mustRunAfter(jar)
 }
 
 nexusStaging {
