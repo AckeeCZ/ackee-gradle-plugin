@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.0] - 2022-05-10
+
+### Added
+- Support for Gradle 8
+
+### Changed
+- Update all dependencies to the latest where possible
+
 ## [3.0.0] - 2022-12-29
 - Plugin rewrite to the new Android gradle plugin API
 - Remove running lint on each non-debug build
