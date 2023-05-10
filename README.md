@@ -51,7 +51,7 @@ The plugin configures the project to automatically copy assembled apk, app bundl
 The plugin also defines two default signing configs: **Debug** and **Release**
 
 - **Debug** config is used to sign **Beta** build types with a debug keystore that does not allow upload to play store.
-- **Release** config is used to sign **Relase** build types that allows upload to play store.
+- **Release** config is used to sign **Release** build types that allows upload to play store.
 
 Credentials used for release signing should be defined in a file with following properties:
 
