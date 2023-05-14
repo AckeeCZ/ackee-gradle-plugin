@@ -30,11 +30,7 @@ abstract class CopyMappingFileTask : DefaultTask() {
         if (inputMappingFile.isPresent) {
             val inputFile = inputMappingFile.get().asFile
             val outputFile = File(outputMappingFile.get().asFile, inputFile.name)
-            if (outputFile.exists()) {
-                outputFile.delete()
-            }
-
-            inputFile.copyTo(outputFile)
+            inputFile.copyTo(outputFile, overwrite = true)
         }
     }
 

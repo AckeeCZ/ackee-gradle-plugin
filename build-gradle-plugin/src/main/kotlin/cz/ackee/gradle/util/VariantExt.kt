@@ -17,3 +17,16 @@ fun ApplicationVariant.assembleTask(project: Project, onAssembleTaskRegister: (T
         }
     }
 }
+
+/**
+ * TODO: Replace this with some more official solution how to get assemble task from variant,
+ *  but for now I wasn't able to find it.
+ */
+fun ApplicationVariant.bundleTask(project: Project, onAssembleTaskRegister: (Task) -> Unit) {
+    project.tasks.whenTaskAdded {
+        val variantName = this@bundleTask.name.capitalized()
+        if (name == "bundle$variantName") {
+            onAssembleTaskRegister(this)
+        }
+    }
+}
