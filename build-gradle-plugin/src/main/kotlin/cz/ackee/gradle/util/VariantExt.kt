@@ -6,8 +6,8 @@ import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
 
 /**
- * TODO: Replace this with some more official solution how to get assemble task from variant,
- *  but for now I wasn't able to find it.
+ * TODO: Replace this with `wiredWith` function once possible AGP bug fixed.
+ *  Currently `SingleArtifact.APK`provides incorrect output path.
  */
 fun ApplicationVariant.assembleTask(project: Project, onAssembleTaskRegister: (Task) -> Unit) {
     project.tasks.whenTaskAdded {
@@ -19,8 +19,8 @@ fun ApplicationVariant.assembleTask(project: Project, onAssembleTaskRegister: (T
 }
 
 /**
- * TODO: Replace this with some more official solution how to get assemble task from variant,
- *  but for now I wasn't able to find it.
+ * TODO: Replace this with `wiredWith` function once possible AGP bug fixed.
+ *  Currently `SingleArtifact.BUNDLE`provides incorrect output path.
  */
 fun ApplicationVariant.bundleTask(project: Project, onAssembleTaskRegister: (Task) -> Unit) {
     project.tasks.whenTaskAdded {
