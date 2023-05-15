@@ -7,7 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [3.1.0] - 2022-05-10
+## [3.1.1] - 2023-05-14
+
+### Fixed
+- Copying artifacts
+  - Copying tasks are now added to the task graph via `finalizedBy` instead of `wiredWith`, 
+    which previously caused errors during building. This issue was likely caused 
+    by some AGP bug, as the output file provided to the task by AGP did not match 
+    the expected input path for the subsequent task.
+
+## [3.1.0] - 2023-05-10
 
 ### Added
 - Support for Gradle 8
@@ -19,6 +28,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Plugin rewrite to the new Android gradle plugin API
 - Remove running lint on each non-debug build
   - It causes slow builds and lint should run only on CI
+
+### Changed
+- New plugin ids (check [README.md] file)
 
 ## [2.3.1] - 2022-09-16
 
