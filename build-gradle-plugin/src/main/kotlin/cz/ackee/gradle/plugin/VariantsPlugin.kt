@@ -2,12 +2,12 @@ package cz.ackee.gradle.plugin
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import cz.ackee.gradle.PropertiesExtensionKotlin
-import cz.ackee.gradle.util.getApplicationAndroidComponents
-import cz.ackee.gradle.util.loadPropertiesFile
 import cz.ackee.gradle.type.CustomBuildTypeCreator
 import cz.ackee.gradle.type.CustomBuildTypeFactory
 import cz.ackee.gradle.type.CustomSigningConfigCreator
 import cz.ackee.gradle.type.CustomSigningConfigFactory
+import cz.ackee.gradle.util.getApplicationAndroidComponents
+import cz.ackee.gradle.util.loadPropertiesFile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
@@ -56,7 +56,7 @@ class VariantsPlugin : Plugin<Project> {
         val factory = CustomBuildTypeFactory(versionCode)
         val customBuildTypes = factory.createBuildTypes()
         finalizeDsl { application ->
-            val creator = CustomBuildTypeCreator(application.buildTypes, application.signingConfigs)
+            val creator = CustomBuildTypeCreator(application)
             customBuildTypes.forEach(creator::maybeCreate)
         }
     }
