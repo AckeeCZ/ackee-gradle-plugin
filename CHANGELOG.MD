@@ -7,6 +7,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.2] - 2023-06-23
+
+### Fixed
+- Applying default proguard file
+  - Proguard file `proguard-android-optimize.txt` is now referenced via `getDefaultProguardFile`
+    and being applied correctly.
+
 ## [3.1.1] - 2023-05-14
 
 ### Fixed
