@@ -2,7 +2,6 @@ package cz.ackee.gradle.plugin
 
 import org.gradle.api.Project
 import org.slf4j.LoggerFactory
-import java.io.ByteArrayOutputStream
 
 class VersionCodeProvider(private val project: Project) {
 
@@ -26,12 +25,10 @@ class VersionCodeProvider(private val project: Project) {
     }
 
     private fun getGitVersionCode(): Int {
-        val outputStream = ByteArrayOutputStream()
-        project.exec {
+        val version = project.providers.exec {
             commandLine("git", "rev-list", "HEAD", "--count")
-            standardOutput = outputStream
-        }
-        return outputStream.toString().trim().toInt()
+        }.standardOutput.asText.get()
+        return version.trim().toInt()
     }
 
     companion object {

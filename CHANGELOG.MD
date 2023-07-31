@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.3] - 2023-07-31
+
+### Fixed
+- Fix external execution to support configuration cache
+
 ## [3.1.2] - 2023-06-23
 
 ### Fixed
