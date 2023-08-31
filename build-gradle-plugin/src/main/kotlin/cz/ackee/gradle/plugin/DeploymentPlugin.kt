@@ -51,10 +51,8 @@ class DeploymentPlugin : Plugin<Project> {
     }
 
     private fun Project.setUpCheckingChangelog() {
-        tasks.whenTaskAdded {
-            if (name.startsWith("appDistributionUpload")) {
-                CheckChangelogFileTask.registerTask(this@setUpCheckingChangelog, this)
-            }
-        }
+        val changelogTaskProvider = CheckChangelogFileTask.registerTask(this@setUpCheckingChangelog)
+        project.tasks.matching { it.name.startsWith("appDistributionUpload") }
+            .configureEach { dependsOn(changelogTaskProvider) }
     }
 }
