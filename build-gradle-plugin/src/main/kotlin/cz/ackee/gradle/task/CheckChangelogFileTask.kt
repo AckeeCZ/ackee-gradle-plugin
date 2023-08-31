@@ -2,8 +2,8 @@ package cz.ackee.gradle.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
@@ -25,13 +25,12 @@ abstract class CheckChangelogFileTask : DefaultTask() {
 
         private const val taskName = "checkChangelogFileTask"
 
-        fun registerTask(project: Project, appDistributionUploadTask: Task) {
-            project.tasks.register<CheckChangelogFileTask>(createTaskName(appDistributionUploadTask)) {
-                appDistributionUploadTask.dependsOn(this)
+        fun registerTask(project: Project): TaskProvider<CheckChangelogFileTask> {
+            return project.tasks.register<CheckChangelogFileTask>(createTaskName()) {
                 group = Groups.DEPLOYMENT
             }
         }
 
-        private fun createTaskName(appDistributionUploadTask: Task) = "$taskName${appDistributionUploadTask.name}"
+        private fun createTaskName() = taskName
     }
 }
