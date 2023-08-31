@@ -40,6 +40,7 @@ fun setUpCodeCoverageTasks(project: Project) {
                     html.required.set(true)
                 }
 
+                val buildDir = layout.buildDirectory
                 val kotlinTree = fileTree(mapOf("dir" to "${buildDir}/tmp/kotlin-classes/$testVariant", "excludes" to excludedFiles))
                 val javacTree = fileTree(mapOf("dir" to "${buildDir}/intermediates/javac/$testVariant", "excludes" to excludedFiles))
                 val mainJavaSrc = "${projectDir}/src/main/java"
