@@ -7,15 +7,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.5] - 2023-09-01
+
+### Fixed
+
+- `CheckChangelogFileTask` now supports configuration cache too
+
 ## [3.1.4] - 2023-09-01
+
 ### Changed
+
 - Update all dependencies to the latest where possible
 
 ## [3.1.3] - 2023-07-31
 
 ### Fixed
+
 - Fix external execution to support configuration cache
-- Fix getting AGP tasks 
+- Fix getting AGP tasks
   - Tasks should be configured via `configureEach` instead of using `whenTaskAdded`
 
 ## [3.1.2] - 2023-06-23
