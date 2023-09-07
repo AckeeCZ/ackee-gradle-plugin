@@ -7,6 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.6] - 2023-09-07
+
+### Fixed
+
+- Fix unnecessary dependency between `copyMappingFile` task and `checkChagelogTask`
+
 ## [3.1.5] - 2023-09-01
 
 ### Fixed
