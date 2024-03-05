@@ -9,6 +9,8 @@ plugins {
 
 dependencies {
     implementation(libs.android.tools.build)
+    implementation(libs.gradleVersions)
+    implementation(libs.owaspDependencyCheck)
 }
 
 ext {
@@ -20,30 +22,38 @@ ext.libProperties = new Properties()
 ext.libProperties.load(file("${rootDir}/lib.properties").newReader())
 
 gradlePlugin {
+    def idPrefix = "io.github.ackeecz.plugin"
+    def commonPackageName = "cz.ackee.gradle.plugin"
+
     plugins {
         register("ackeeGradlePlugin") {
-            id = 'io.github.ackeecz.plugin.build'
-            implementationClass = 'cz.ackee.gradle.plugin.AckeeGradlePlugin'
-        }
-
-        register("verificationsPlugin") {
-            id = "io.github.ackeecz.plugin.verifications"
-            implementationClass = "cz.ackee.gradle.plugin.VerificationsPlugin"
-        }
-
-        register("variantsPlugin") {
-            id = "io.github.ackeecz.plugin.variants"
-            implementationClass = "cz.ackee.gradle.plugin.VariantsPlugin"
-        }
-
-        register("deploymentPlugin") {
-            id = "io.github.ackeecz.plugin.deployment"
-            implementationClass = "cz.ackee.gradle.plugin.DeploymentPlugin"
+            id = "${idPrefix}.build"
+            implementationClass = "${commonPackageName}.AckeeGradlePlugin"
         }
 
         register("configureAppPlugin") {
-            id = "io.github.ackeecz.plugin.config"
-            implementationClass = "cz.ackee.gradle.plugin.ConfigureAppPlugin"
+            id = "${idPrefix}.config"
+            implementationClass = "${commonPackageName}.ConfigureAppPlugin"
+        }
+
+        register("dependenciesCheckPlugin") {
+            id = "${idPrefix}.dependenciescheck"
+            implementationClass = "${commonPackageName}.DependenciesCheckPlugin"
+        }
+
+        register("deploymentPlugin") {
+            id = "${idPrefix}.deployment"
+            implementationClass = "${commonPackageName}.DeploymentPlugin"
+        }
+
+        register("variantsPlugin") {
+            id = "${idPrefix}.variants"
+            implementationClass = "${commonPackageName}.VariantsPlugin"
+        }
+
+        register("verificationsPlugin") {
+            id = "${idPrefix}.verifications"
+            implementationClass = "${commonPackageName}.VerificationsPlugin"
         }
     }
 }
