@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.2.0] - 2024-03-05
+### Added
+- Support for Gradle plugins for checking outdated dependencies and vulnerable dependencies. This 
+version is compatible with Danger plugin https://github.com/AckeeCZ/danger-kotlin-dependencies-check
+of version 1.0.0. Newly added Gradle plugins are:
+  * https://github.com/jeremylong/DependencyCheck
+  * https://github.com/ben-manes/gradle-versions-plugin
+
 ## [3.1.6] - 2023-09-07
 
 ### Fixed
