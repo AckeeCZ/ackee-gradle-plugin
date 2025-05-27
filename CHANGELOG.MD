@@ -7,6 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.3.0] - 2025-05-27
+### Removed
+- Support for Gradle plugins for checking outdated dependencies and vulnerable dependencies. The
+existing integration on CI using Danger was not convenient and we have now other process for updating
+dependencies. Updating dependencies does maximum for fixing vulnerabilities as well.
+
 ## [3.2.0] - 2024-03-05
 ### Added
 - Support for Gradle plugins for checking outdated dependencies and vulnerable dependencies. This 
