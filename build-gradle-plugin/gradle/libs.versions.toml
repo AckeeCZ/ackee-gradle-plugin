@@ -1,20 +1,15 @@
 [versions]
 androidGradlePlugin = "8.1.1"
 dokka = "1.9.0"
-gradleVersionsPlugin = "0.51.0"
 kotlin = "1.9.0"
 # TODO This should be ideally somehow deleted and we should let Gradle to select the version itself,
 #  because it complains in the warning. However, it seems like it is not possible to just remove the
 #  version, because then it just fails, that it doesn't know the version 🫠🫠🫠
 kotlin-dsl = "4.1.0"
 nexus = "0.22.0"
-# TODO Update to 9.x.x (https://redmine.ack.ee/issues/87627)
-owaspDependencyCheck = "8.1.2"
 
 [libraries]
 android-tools-build = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
-gradleVersions = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradleVersionsPlugin" }
-owaspDependencyCheck = { module = "org.owasp:dependency-check-gradle", version.ref = "owaspDependencyCheck" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

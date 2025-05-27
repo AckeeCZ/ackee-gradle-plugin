@@ -9,8 +9,6 @@ plugins {
 
 dependencies {
     implementation(libs.android.tools.build)
-    implementation(libs.gradleVersions)
-    implementation(libs.owaspDependencyCheck)
 }
 
 ext {
@@ -34,11 +32,6 @@ gradlePlugin {
         register("configureAppPlugin") {
             id = "${idPrefix}.config"
             implementationClass = "${commonPackageName}.ConfigureAppPlugin"
-        }
-
-        register("dependenciesCheckPlugin") {
-            id = "${idPrefix}.dependenciescheck"
-            implementationClass = "${commonPackageName}.DependenciesCheckPlugin"
         }
 
         register("deploymentPlugin") {
