@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew :build-gradle-plugin:assemble
       - name: Publish to Maven Central
         run: |
-          ./gradlew --stacktrace publishAndReleaseToMavenCentral \
+          ./gradlew --stacktrace :build-gradle-plugin:publishAndReleaseToMavenCentral \
             -PsigningInMemoryKey=$GPG_KEY \
             -PsigningInMemoryKeyPassword=$GPG_PASSWORD \
             -PmavenCentralUsername=$MAVEN_USERNAME \
