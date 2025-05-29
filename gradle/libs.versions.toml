@@ -1,0 +1,16 @@
+[versions]
+androidGradlePlugin = "8.1.1"
+kotlin-dokka = "1.9.0"
+mavenPublish = "0.32.0"
+
+[libraries]
+# Build logic dependencies
+android-tools-build = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+mavenPublish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
+
+[plugins]
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
+
+# Convention plugins defined by this project
+ackee-internal-publish = { id = "ackee.internal.publish" }
