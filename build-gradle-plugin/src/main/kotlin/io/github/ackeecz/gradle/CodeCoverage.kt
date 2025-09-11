@@ -8,8 +8,10 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
+private const val JACOCO_VERSION = "0.8.13"
+
 /**
- * TODO refactor this a bit
+ * TODO refactor this a LOT! Maybe remove/replace Jacoco completely
  *
  * Setup JaCoCo code coverage tasks. First create a task for each submodule that computes
  * coverage for that module. Then define task that aggregates those results and prints full
@@ -28,7 +30,7 @@ fun setUpCodeCoverageTasks(project: Project) {
         with(it) {
             plugins.apply("jacoco")
             extensions.configure(JacocoPluginExtension::class.java) {
-                this.toolVersion = "0.8.8"
+                this.toolVersion = JACOCO_VERSION
             }
             tasks.register<JacocoReport>("jacocoTestReport") {
                 group = "Reporting"
@@ -68,7 +70,7 @@ fun setUpCodeCoverageTasks(project: Project) {
     // define aggregating task
     project.plugins.apply("jacoco")
     project.extensions.configure(JacocoPluginExtension::class.java) {
-        this.toolVersion = "0.8.7"
+        this.toolVersion = JACOCO_VERSION
     }
     project.tasks.register<JacocoReport>("jacocoFullReport") {
         group = "Reporting"

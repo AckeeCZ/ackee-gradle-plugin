@@ -1,7 +1,6 @@
 package io.github.ackeecz.gradle.plugin
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
-import com.vanniktech.maven.publish.SonatypeHost
 import io.github.ackeecz.gradle.properties.LibraryProperties
 import io.github.ackeecz.gradle.util.apply
 import io.github.ackeecz.gradle.util.libs
@@ -55,7 +54,7 @@ internal class PublishingPlugin : Plugin<Project> {
             }
 
             signAllPublications()
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+            publishToMavenCentral()
         }
     }
 }
