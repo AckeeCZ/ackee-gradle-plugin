@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.3.2] - 2025-09-13
+### Changed
+- Add verification of source and target folders in CopyGitHooksTask and register the task only if both 
+folders exist.
+
 ## [3.3.1] - 2025-09-11
 ### Changed
 - Update all dependencies including old Jacoco version that was problematic since Gradle 9.0.0
