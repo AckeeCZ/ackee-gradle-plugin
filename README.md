@@ -174,16 +174,16 @@ directory to the file `detekt-config-common.yml`.
 
 It can be used in any (Android) project by adding the plugin in the project's `build.gradle` file:
 
-``` groovy
+``` kotlin
 plugins {
-    id "cz.ackee.build" version "3.1.6" apply false
+    id("io.github.ackeecz.plugin.build").version("<version>").apply(false)
     
     // or
     
-    id "cz.ackee.verifications" version "3.1.6" apply false
-    id "cz.ackee.variants" version "3.1.6" apply false
-    id "cz.ackee.deployment" version "3.1.6" apply false
-    id "cz.ackee.config" version "3.1.6" apply false
+    id("io.github.ackeecz.plugin.verifications").version("<version>").apply(false)
+    id("io.github.ackeecz.plugin.variants").version("<version>").apply(false)
+    id("io.github.ackeecz.plugin.deployment").version("<version>").apply(false)
+    id("io.github.ackeecz.plugin.config").version("<version>").apply(false)
 }
 ```
 
@@ -192,7 +192,7 @@ Or you can use the old way:
 ``` groovy
 buildscript {
     dependencies {
-        classpath("io.github.ackeecz:build-gradle-plugin:3.1.6")
+        classpath("io.github.ackeecz:build-gradle-plugin:<version>")
     }
 }
 ```
@@ -201,21 +201,21 @@ and applying the plugin in the app's module:
 
 ```
 plugins {
-    id("cz.ackee.build")
+    id("io.github.ackeecz.plugin.build")
     
     // or
     
-    id("cz.ackee.verifications")
-    id("cz.ackee.variants")
-    id("cz.ackee.deployment")
-    id("cz.ackee.config")
+    id("io.github.ackeecz.plugin.verifications")
+    id("io.github.ackeecz.plugin.variants")
+    id("io.github.ackeecz.plugin.deployment")
+    id("io.github.ackeecz.plugin.config")
 }
 ```
-- `cz.ackee.build` contains everything
-- `cz.ackee.verifications` sets up detekt, code coverage, lint, copying git hooks
-- `cz.ackee.variants` configures build types and signing
-- `cz.ackee.deployment` copies artifacts and checks changelog
-- `cz.ackee.config` provides `app.properties` and sets `versionCode`
+- `io.github.ackeecz.plugin.build` contains everything
+- `io.github.ackeecz.plugin.verifications` sets up detekt, code coverage, lint, copying git hooks
+- `io.github.ackeecz.plugin.variants` configures build types and signing
+- `io.github.ackeecz.plugin.deployment` copies artifacts and checks changelog
+- `io.github.ackeecz.plugin.config` provides `app.properties` and sets `versionCode`
 
 App's `keystore.properties` and `app.properties` locations can be changed using
 `keystoreProperties` and `appProperties` such as:
