@@ -1,11 +1,11 @@
 package io.github.ackeecz.gradle.plugin
 
 import com.android.build.api.dsl.Lint
-import io.github.ackeecz.gradle.util.getApplicationAndroidComponents
 import io.github.ackeecz.gradle.setUpCodeCoverageTasks
 import io.github.ackeecz.gradle.task.FetchDetektConfigTask
 import io.github.ackeecz.gradle.task.copy.githooks.CopyGitHooksTask
 import io.github.ackeecz.gradle.util.assembleTask
+import io.github.ackeecz.gradle.util.getApplicationAndroidComponents
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.File
@@ -45,7 +45,7 @@ class VerificationsPlugin : Plugin<Project> {
     }
 
     private fun Project.setUpCopyGitHooks() {
-        val copyGitHooksProvider = CopyGitHooksTask.registerTask(project)
+        val copyGitHooksProvider = CopyGitHooksTask.registerTask(project) ?: return
         project.getApplicationAndroidComponents().onVariants { variant ->
             variant.assembleTask(project) { it.dependsOn(copyGitHooksProvider) }
         }
