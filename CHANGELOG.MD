@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.4.0] - 2025-09-16
 ### Removed
 - FetchDetektConfigTask because it is replaced by a new approach of Detekt config sharing (for more
 info see https://github.com/AckeeCZ/detekt-config)
