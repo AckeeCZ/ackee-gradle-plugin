@@ -1,9 +1,8 @@
 [versions]
-android-appcompat = "1.7.1"
-android-gradlePlugin = "8.13.0"
-kotlin = "2.2.10"
-kotlin-dokka = "2.0.0"
-mavenPublish = "0.34.0"
+android-appcompat = "1.8.0"
+android-gradlePlugin = "9.4.1"
+kotlin-dokka = "2.2.0"
+mavenPublish = "0.37.0"
 
 [libraries]
 android-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "android-appcompat" }
@@ -14,7 +13,6 @@ mavenPublish-gradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plug
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 

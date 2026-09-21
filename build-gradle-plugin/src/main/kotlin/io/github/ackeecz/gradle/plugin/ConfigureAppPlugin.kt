@@ -26,13 +26,15 @@ class ConfigureAppPlugin : Plugin<Project> {
             "app.properties"
         )
 
-        @Suppress("UNUSED_VARIABLE")
-        val appProperties by extra(Properties().apply {
-            val keystorePropertiesFile = file(keystorePropertiesExt.fullPath)
-            if (keystorePropertiesFile.exists()) {
-                loadPropertiesFile(keystorePropertiesFile)
-            }
-        })
+        extra.set(
+            "appProperties",
+            Properties().apply {
+                val keystorePropertiesFile = file(keystorePropertiesExt.fullPath)
+                if (keystorePropertiesFile.exists()) {
+                    loadPropertiesFile(keystorePropertiesFile)
+                }
+            },
+        )
     }
 
     private fun Project.setVersionCode() {

@@ -1,35 +1,30 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     id("io.github.ackeecz.plugin.build")
 }
 
 android {
     def appProperties = project.ext.appProperties
 
-    namespace 'cz.ackee.sample'
+    namespace = 'cz.ackee.sample'
 
-    compileSdk(36)
+    compileSdk = 37
 
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(36)
+        minSdk = 23
+        targetSdk = 37
         applicationId = appProperties["package_name"]
         versionName = appProperties["version_name"]
 
-        manifestPlaceholders = [appName: "Gradle build"]
+        manifestPlaceholders.put("appName", "Gradle build")
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation(libs.android.appcompat)
 }

@@ -8,15 +8,20 @@ import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+@DisableCachingByDefault(because = "Copying an artifact is not worth caching")
 abstract class CopyBundleArtifactTask : DefaultTask() {
 
     @get:InputFiles
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val aabFileInput: RegularFileProperty
 
     @get:OutputFile
