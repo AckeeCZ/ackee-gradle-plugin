@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-09-21
+### Changed
+- Update to AGP 9.4.1 and adapt the plugin to AGP 9 (new DSL, built-in Kotlin). Consuming projects
+must be migrated to AGP 9 and drop the `org.jetbrains.kotlin.android` plugin.
+- Update Gradle to 9.7.1, Jacoco to 0.8.15, Dokka to 2.2.0 and the Maven publish plugin to 0.37.0.
+- Annotate copy/check tasks with `@DisableCachingByDefault` and declare path sensitivity of their
+inputs, which removes the Gradle cacheability warnings.
+- Replace the deprecated `by extra(...)` delegate syntax with `extra.set(...)`, which is required by
+Gradle 10.
+
 ## [3.4.0] - 2025-09-16
 ### Removed
 - FetchDetektConfigTask because it is replaced by a new approach of Detekt config sharing (for more

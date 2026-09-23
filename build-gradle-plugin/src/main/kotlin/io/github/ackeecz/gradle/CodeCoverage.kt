@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
-private const val JACOCO_VERSION = "0.8.13"
+private const val JACOCO_VERSION = "0.8.15"
 
 /**
  * TODO refactor this a LOT! Maybe remove/replace Jacoco completely

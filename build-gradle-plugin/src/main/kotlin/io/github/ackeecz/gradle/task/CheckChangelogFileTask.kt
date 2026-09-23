@@ -7,12 +7,14 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
 /**
  * App Distribution expects changelog in file `outputs/changelog.txt` where CI store the changelog. If this file does
  * not exist upload fails. This task ensures that the file exists
  */
+@DisableCachingByDefault(because = "Only ensures an output file exists; not worth caching")
 abstract class CheckChangelogFileTask : DefaultTask() {
 
     @get:OutputFile

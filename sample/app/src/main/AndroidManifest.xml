@@ -5,7 +5,22 @@
 
     <application
         android:allowBackup="false"
-        android:label="${appName}">
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="${appName}"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="io.github.ackeecz.gradle.sample.MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

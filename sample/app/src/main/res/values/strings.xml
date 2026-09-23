@@ -1,3 +1,8 @@
-<resources>
-    <string name="app_name">Gradle Build</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Used by the release manifest only, so it looks unused to non-release variants. -->
+    <string name="app_name" tools:ignore="UnusedResources">Gradle Build</string>
+
+    <string name="sample_text">Ackee Gradle Plugin sample</string>
+
 </resources>

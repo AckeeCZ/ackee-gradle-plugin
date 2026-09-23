@@ -43,12 +43,13 @@ class VariantsPlugin : Plugin<Project> {
             project,
             "keystore.properties"
         )
-        val keystoreProperties by project.extra(Properties().apply {
+        val keystoreProperties = Properties().apply {
             val keystorePropertiesFile = project.file(keystorePropertiesExt.fullPath)
             if (keystorePropertiesFile.exists()) {
                 loadPropertiesFile(keystorePropertiesFile)
             }
-        })
+        }
+        project.extra.set("keystoreProperties", keystoreProperties)
         return keystoreProperties
     }
 
