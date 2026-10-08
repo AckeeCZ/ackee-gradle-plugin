@@ -88,63 +88,6 @@ Properties are extracted from the `app.properties` file located in the project's
 If folder `.githooks` exists within the repository, the content of this folder is copied to the `.git/hooks` folder. That is
 because we want to have some hooks as part of the git repository and there is no standard way to do so.
 
-### JaCoCo code coverage support
-
-For each module task `jacocoTestReport` is generated that generates html JaCoCo report. Also, the `jacocoFullReport` task is added for the whole project that aggregates the results of all submodules tasks and generates
-HTML output to `build/reports/jacoco/html/index.html`. These configuration properties are present:
-
-- `jacocoExcludedProjects` - string list of module names you want to exclude. Defaults to an empty list.
-- `jacocoTestVariant` - a build variant of the test against which code coverage is computed. Defaults to `devApiDebug`
-  since it's the most common setup on Ackee projects.
-- `jacocoExcludedFiles` - string list of excluded file patterns that we don't want to include in the code coverage report.
-  Defaults to an empty list.
-
-Place your configuration file to `gradle/jacoco-config.gradle` in your project root.
-
-Example configuration
-
-```
-project.ext {
-    jacocoExcludedProjects = [
-            "features",
-            "libraries"
-    ]
-
-    jacocoTestVariant = "devApiDebug"
-
-    jacocoExcludedFiles = [
-            '**/*App.*',
-            '**/*Application*',
-            '**/*Activity*',
-            '**/*Fragment*',
-            '**/*View.*',
-            '**/*ViewGroup.*',
-            '**/*JsonAdapter.*',
-            '**/*Layout*',
-            '**/epoxy/**',
-            '**/di/**',
-            '**/*Dagger.*',
-            '**/ui_components/**',
-            "**/com/**",
-            "**/androidx/**",
-            "**/org/**",
-            "**/BuildConfig.*",
-            "**/*Model_.*",
-            "**/*styleable*",
-            "**/grpc/*",
-            "**/*Exception*",
-            "**DI**"
-    ]
-}
-```
-
-The last thing you need to do is to place to your root `build.gradle` this line at the end of the file so the ext
-properties are loaded within the project
-
-```
-apply from: "$rootDir/gradle/jacoco-config.gradle"
-```
-
 ### Fetch of common Detekt config
 
 Ackee apps use [detekt](https://github.com/detekt/detekt) tool for static analysis of the Kotlin source code. We have
@@ -194,7 +137,7 @@ plugins {
 }
 ```
 - `io.github.ackeecz.plugin.build` contains everything
-- `io.github.ackeecz.plugin.verifications` sets up detekt, code coverage, lint, copying git hooks
+- `io.github.ackeecz.plugin.verifications` sets up detekt, lint, copying git hooks
 - `io.github.ackeecz.plugin.variants` configures build types and signing
 - `io.github.ackeecz.plugin.deployment` copies artifacts and checks changelog
 - `io.github.ackeecz.plugin.config` provides `app.properties` and sets `versionCode`

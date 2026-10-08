@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- **Breaking change**: Removed JaCoCo code coverage support. The `jacocoTestReport` and `jacocoFullReport`
+tasks are no longer registered and the `jacocoExcludedProjects`, `jacocoTestVariant` and `jacocoExcludedFiles`
+`ext` properties are ignored. When updating, consuming projects should:
+  - delete the dead `gradle/jacoco-config.gradle` file and its `apply from: "$rootDir/gradle/jacoco-config.gradle"`
+  line in the root build script,
+  - update Ackee GitLab CI components to at least `6.2.0`, because older versions of the `unit_tests` component
+  run `jacocoFullReport` whenever `gradle/jacoco-config.gradle` exists.
 
 ## [3.5.1] - 2026-10-08
 ### Fixed
