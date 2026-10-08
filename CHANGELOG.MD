@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.0.0] - 2026-10-08
 ### Removed
 - **Breaking change**: Removed JaCoCo code coverage support. The `jacocoTestReport` and `jacocoFullReport`
 tasks are no longer registered and the `jacocoExcludedProjects`, `jacocoTestVariant` and `jacocoExcludedFiles`
