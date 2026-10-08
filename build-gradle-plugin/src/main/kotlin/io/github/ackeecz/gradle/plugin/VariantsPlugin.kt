@@ -42,7 +42,7 @@ class VariantsPlugin : Plugin<Project> {
             project,
             "keystore.properties"
         )
-        val keystoreProperties = project.loadProperties(project.file(keystorePropertiesExt.fullPath))
+        val keystoreProperties = project.loadProperties(keystorePropertiesExt.fullPath)
         project.extra.set("keystoreProperties", keystoreProperties)
         return keystoreProperties
     }

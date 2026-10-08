@@ -24,7 +24,7 @@ class ConfigureAppPlugin : Plugin<Project> {
             "app.properties"
         )
 
-        extra.set("appProperties", loadProperties(file(appPropertiesExt.fullPath)))
+        extra.set("appProperties", loadProperties(appPropertiesExt.fullPath))
     }
 
     private fun Project.setVersionCode() {
