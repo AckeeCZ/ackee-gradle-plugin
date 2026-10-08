@@ -106,13 +106,6 @@ appProperties {
 If folder `.githooks` exists within the repository, the content of this folder is copied to the `.git/hooks` folder. That is
 because we want to have some hooks as part of the git repository and there is no standard way to do so.
 
-### Fetch of common Detekt config
-
-Ackee apps use [detekt](https://github.com/detekt/detekt) tool for static analysis of the Kotlin source code. We have
-a common configuration defined in our [styleguide](https://github.com/AckeeCZ/styleguide/tree/master/android) repository.
-There is a `fetchDetektConfig` Gradle task that fetches the newest config from Github and stores it in the project
-directory to the file `detekt-config-common.yml`.
-
 ## Usage
 
 It can be used in any (Android) project by adding the plugin in the project's `build.gradle` file:
@@ -155,7 +148,7 @@ plugins {
 }
 ```
 - `io.github.ackeecz.plugin.build` contains everything
-- `io.github.ackeecz.plugin.verifications` sets up detekt, lint, copying git hooks
+- `io.github.ackeecz.plugin.verifications` sets up lint and copying git hooks
 - `io.github.ackeecz.plugin.variants` configures build types and signing
 - `io.github.ackeecz.plugin.deployment` copies artifacts and checks changelog
 - `io.github.ackeecz.plugin.config` provides `app.properties` and sets `versionCode`
