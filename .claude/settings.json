@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew *)",
+      "Bash(cat *)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(find *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git pop *)",
+      "Bash(git push *)",
+      "Bash(git rebase *)",
+      "Bash(git rev-parse *)",
+      "Bash(git stash *)",
+      "Bash(git status *)",
+      "Bash(git worktree *)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(pwd *)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push * --force*)",
+      "Bash(git push --force-with-lease*)",
+      "Bash(git push * --force-with-lease*)",
+      "Bash(git branch -d*)",
+      "Bash(git branch -D*)",
+      "Bash(git branch * -d*)",
+      "Bash(git branch * -D*)",
+      "Bash(git push * --delete*)",
+      "Read(local.properties)",
+      "Edit(local.properties)"
+    ]
+  },
+  "enabledPlugins": {
+    "mob-and-update-deps@ackee-mobile-ai-marketplace": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "kotlin-agent-skills@Kotlin": true
+  },
+  "extraKnownMarketplaces": {
+    "Kotlin": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:Kotlin/kotlin-agent-skills.git"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false,
+    "filesystem": {
+      "allowWrite": [
+        "~/.gradle/**"
+      ],
+      "denyRead": [
+        "./local.properties"
+      ]
+    },
+    "excludedCommands": [
+      "./gradlew *"
+    ]
+  },
+  "plansDirectory": "./.claude/plans"
+}
