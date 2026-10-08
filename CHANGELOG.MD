@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.5.1] - 2026-10-08
 ### Fixed
 - Changing the content of `app.properties` or `keystore.properties` now invalidates the configuration
 cache. Previously, the cached configuration with the old values (e.g. `version_name` or signing
