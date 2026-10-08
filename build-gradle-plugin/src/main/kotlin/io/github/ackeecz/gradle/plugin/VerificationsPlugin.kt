@@ -1,7 +1,6 @@
 package io.github.ackeecz.gradle.plugin
 
 import com.android.build.api.dsl.Lint
-import io.github.ackeecz.gradle.setUpCodeCoverageTasks
 import io.github.ackeecz.gradle.task.copy.githooks.CopyGitHooksTask
 import io.github.ackeecz.gradle.util.assembleTask
 import io.github.ackeecz.gradle.util.getApplicationAndroidComponents
@@ -12,14 +11,9 @@ class VerificationsPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         with(project) {
-            setUpCodeCoverage()
             setUpLint()
             setUpCopyGitHooks()
         }
-    }
-
-    private fun Project.setUpCodeCoverage() {
-        project.parent?.let(::setUpCodeCoverageTasks)
     }
 
     private fun Project.setUpLint() {
