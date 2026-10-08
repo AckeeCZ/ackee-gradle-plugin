@@ -61,17 +61,7 @@ key_file=release.keystore
 key_password=mypass
 ```
 
-By default, the credentials are extracted from the `keystore.properties` file located in the project's root directory. You
-can change the location by declaring a custom path and/or fileName such as:
-
-```
-keystoreProperties {
-    path = "${project.rootDir}\\keystore\\" // optional
-    fileName = "release.keystore.properties" // optional
-}
-```
-
-in the app's module.
+The credentials are extracted from the `keystore.properties` file located in the project's root directory.
 
 ### App properties
 
@@ -91,15 +81,7 @@ All properties also become accessible in the build scripts like:
 appProperties['package_name']
 ```
 
-By default, properties are extracted from the `app.properties` file located in the project's root directory but the file location
-can be changed with
-
-```
-appProperties {
-    path = "${project.rootDir}\\" // optional
-    fileName = "custom.properties" // optional
-}
-```
+Properties are extracted from the `app.properties` file located in the project's root directory.
 
 ### Git hooks copying
 
@@ -216,16 +198,6 @@ plugins {
 - `io.github.ackeecz.plugin.variants` configures build types and signing
 - `io.github.ackeecz.plugin.deployment` copies artifacts and checks changelog
 - `io.github.ackeecz.plugin.config` provides `app.properties` and sets `versionCode`
-
-App's `keystore.properties` and `app.properties` locations can be changed using
-`keystoreProperties` and `appProperties` such as:
-
-```
-appProperties {
-    path = "${project.rootDir}\\" // optional
-    fileName = "custom.properties" // optional
-}
-```
 
 You don't have to declare 3 default build types (**Debug**, **Beta**, **Release**) as they are already set up by the
 plugin. You can still add another build type (for example **Monkey**) as normal and ignore the 3 default ones. If you
