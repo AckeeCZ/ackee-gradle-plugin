@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Published Gradle plugin that applies Ackee's standard setup to Android **application** modules: build types,
-signing, `app.properties`, versionCode, lint, JaCoCo, git hooks, and artifact copying. Feature docs for
+signing, `app.properties`, versionCode, lint, git hooks, and artifact copying. Feature docs for
 consumers live in `README.md`.
 
 - Maven coordinates: `io.github.ackeecz:build-gradle-plugin`; root package `io.github.ackeecz.gradle`
@@ -35,7 +35,7 @@ Five plugin IDs (`io.github.ackeecz.plugin.<suffix>` → `plugin/<ClassName>`):
 | `build` | `AckeeGradlePlugin` | Applies the four below |
 | `config` | `ConfigureAppPlugin` | `appProperties` extension + `extra`, sets `versionCode` |
 | `variants` | `VariantsPlugin` | Debug/Beta/Release build types + signing configs from `keystore.properties` |
-| `verifications` | `VerificationsPlugin` | Strict lint, JaCoCo tasks (on the **parent** project), copy `.githooks` |
+| `verifications` | `VerificationsPlugin` | Strict lint, copy `.githooks` |
 | `deployment` | `DeploymentPlugin` | Copies APK/AAB/mapping to `<root>/outputs`, changelog check before `appDistributionUpload*` |
 
 - Everything goes through `ApplicationAndroidComponentsExtension` (`getApplicationAndroidComponents()`), so
@@ -46,8 +46,6 @@ Five plugin IDs (`io.github.ackeecz.plugin.<suffix>` → `plugin/<ClassName>`):
   with `*Creator.maybeCreate`, so consumer-declared types with the same name are kept and extended.
 - Copy tasks extend `task/copy/FileCopyTask`; each exposes a static `registerTask(...)`. Tasks are
   `@DisableCachingByDefault` and declare `@PathSensitive` on inputs.
-- `CodeCoverage.kt` is legacy (marked TODO) and configured through `project.ext` values
-  (`jacocoExcludedProjects`, `jacocoTestVariant`, `jacocoExcludedFiles`).
 
 ## Commands
 
