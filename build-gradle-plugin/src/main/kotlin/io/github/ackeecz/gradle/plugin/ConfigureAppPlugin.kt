@@ -2,12 +2,10 @@ package io.github.ackeecz.gradle.plugin
 
 import io.github.ackeecz.gradle.PropertiesExtensionKotlin
 import io.github.ackeecz.gradle.util.getApplicationAndroidComponents
-import io.github.ackeecz.gradle.util.loadPropertiesFile
+import io.github.ackeecz.gradle.util.loadProperties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
-import org.gradle.kotlin.dsl.invoke
-import java.util.Properties
 
 class ConfigureAppPlugin : Plugin<Project> {
 
@@ -19,22 +17,14 @@ class ConfigureAppPlugin : Plugin<Project> {
     }
 
     private fun Project.provideAppProperties() {
-        val keystorePropertiesExt = extensions.create(
+        val appPropertiesExt = extensions.create(
             "appProperties",
             PropertiesExtensionKotlin::class.java,
             this,
             "app.properties"
         )
 
-        extra.set(
-            "appProperties",
-            Properties().apply {
-                val keystorePropertiesFile = file(keystorePropertiesExt.fullPath)
-                if (keystorePropertiesFile.exists()) {
-                    loadPropertiesFile(keystorePropertiesFile)
-                }
-            },
-        )
+        extra.set("appProperties", loadProperties(appPropertiesExt.fullPath))
     }
 
     private fun Project.setVersionCode() {

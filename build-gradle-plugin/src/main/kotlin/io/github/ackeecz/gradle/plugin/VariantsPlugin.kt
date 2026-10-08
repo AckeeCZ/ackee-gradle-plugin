@@ -7,11 +7,10 @@ import io.github.ackeecz.gradle.type.CustomBuildTypeFactory
 import io.github.ackeecz.gradle.type.CustomSigningConfigCreator
 import io.github.ackeecz.gradle.type.CustomSigningConfigFactory
 import io.github.ackeecz.gradle.util.getApplicationAndroidComponents
-import io.github.ackeecz.gradle.util.loadPropertiesFile
+import io.github.ackeecz.gradle.util.loadProperties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
-import org.gradle.kotlin.dsl.invoke
 import java.util.Properties
 
 class VariantsPlugin : Plugin<Project> {
@@ -43,12 +42,7 @@ class VariantsPlugin : Plugin<Project> {
             project,
             "keystore.properties"
         )
-        val keystoreProperties = Properties().apply {
-            val keystorePropertiesFile = project.file(keystorePropertiesExt.fullPath)
-            if (keystorePropertiesFile.exists()) {
-                loadPropertiesFile(keystorePropertiesFile)
-            }
-        }
+        val keystoreProperties = project.loadProperties(keystorePropertiesExt.fullPath)
         project.extra.set("keystoreProperties", keystoreProperties)
         return keystoreProperties
     }
